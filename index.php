@@ -1,5 +1,8 @@
 <?php
-
+if( ! ini_get('date.timezone') )
+{
+   date_default_timezone_set('Asia/Chongqing');
+} 
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT
@@ -18,7 +21,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'production');
+	define('ENVIRONMENT', 'development');
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
