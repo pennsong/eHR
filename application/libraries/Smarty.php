@@ -20,6 +20,7 @@ class CI_Smarty extends Smarty
 		$this->template_dir = APPPATH . "views/templates/";
 		$this->assign('APPPATH', APPPATH);
 		$this->assign('BASEPATH', BASEPATH);
+		$this -> autoload_filters = array('pre' => array('cw_convertSmartyDelimiter'));
 		log_message('debug', "Smarty Class Initialized");
 	}
 
