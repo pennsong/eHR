@@ -166,7 +166,38 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	{
 		return mysqli_fetch_object($this->result_id);
 	}
+	
+	// --------------------------------------------------------------------
 
+	/**
+	 * Free the all result
+	 *
+	 * @return boolean
+	 * @author penn
+	 */
+	function free_all()
+	{
+		if ($this->result_id instanceof mysqli_result)
+		{
+			$this->result_id->free();
+		}
+		while ($this->conn_id->next_result())
+		{
+			$this->result_id = $this->conn_id->use_result();
+			if ($this->result_id instanceof mysqli_result)
+			{
+				$this->result_id->free();
+			}
+		}
+		if ($this->conn_id->error)
+		{
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
 }
 
 
