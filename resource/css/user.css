@@ -1,0 +1,269 @@
+.inline {
+	display: inline-block;
+}
+.relative {
+	position: relative;
+}
+.prepend-top1 {
+	margin-top: 1px;
+}
+.prepend-top2 {
+	margin-top: 2px;
+}
+.prepend-top3 {
+	margin-top: 3px;
+}
+.prepend-top4 {
+	margin-top: 4px;
+}
+.prepend-top5 {
+	margin-top: 5px;
+}
+.prepend-top6 {
+	margin-top: 6px;
+}
+.prepend-top7 {
+	margin-top: 7px;
+}
+.prepend-top8 {
+	margin-top: 8px;
+}
+.prepend-top9 {
+	margin-top: 9px;
+}
+.prepend-top10 {
+	margin-top: 10px;
+}
+.prepend-top11 {
+	margin-top: 11px;
+}
+.prepend-top12 {
+	margin-top: 12px;
+}
+.prepend-top13 {
+	margin-top: 13px;
+}
+.prepend-top14 {
+	margin-top: 14px;
+}
+.prepend-top15 {
+	margin-top: 15px;
+}
+.prepend-top16 {
+	margin-top: 16px;
+}
+.prepend-top17 {
+	margin-top: 17px;
+}
+.prepend-top18 {
+	margin-top: 18px;
+}
+.prepend-top19 {
+	margin-top: 19px;
+}
+.prepend-top20 {
+	margin-top: 20px;
+}
+.append-bottom1 {
+	margin-bottom: 1px;
+}
+.append-bottom2 {
+	margin-bottom: 2px;
+}
+.append-bottom3 {
+	margin-bottom: 3px;
+}
+.append-bottom4 {
+	margin-bottom: 4px;
+}
+.append-bottom5 {
+	margin-bottom: 5px;
+}
+.append-bottom6 {
+	margin-bottom: 6px;
+}
+.append-bottom7 {
+	margin-bottom: 7px;
+}
+.append-bottom8 {
+	margin-bottom: 8px;
+}
+.append-bottom9 {
+	margin-bottom: 9px;
+}
+.append-bottom10 {
+	margin-bottom: 10px;
+}
+.append-bottom11 {
+	margin-bottom: 11px;
+}
+.append-bottom12 {
+	margin-bottom: 12px;
+}
+.append-bottom13 {
+	margin-bottom: 13px;
+}
+.append-bottom14 {
+	margin-bottom: 14px;
+}
+.append-bottom15 {
+	margin-bottom: 15px;
+}
+.append-bottom16 {
+	margin-bottom: 16px;
+}
+.append-bottom17 {
+	margin-bottom: 17px;
+}
+.append-bottom18 {
+	margin-bottom: 18px;
+}
+.append-bottom19 {
+	margin-bottom: 19px;
+}
+.append-bottom20 {
+	margin-bottom: 20px;
+}
+/*user interface defined by system specification*/
+.defaultStrContainer {
+	z-index: 100;
+}
+.defaultStr1 {
+	padding-top: 4px;
+	padding-bottom: 2px;
+	position: absolute;
+	top: 0px;
+	left: 2px;
+	font-size: 14px;
+	line-height: 14px;
+	height: 14px;
+	color: #a1a1a1;
+	z-index: 200;
+	display: none;
+}
+.head1 {
+	height: 30px;
+	line-height: 30px;
+	font-size: 30px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: black;
+	display: inline-block;
+}
+.head2 {
+	height: 20px;
+	line-height: 20px;
+	font-size: 20px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: black;
+	display: inline-block;
+}
+.head3 {
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: black;
+	display: inline-block;
+}
+.head4 {
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: white;
+	display: inline-block;
+}
+.text1 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: black;
+	display: inline-block;
+}
+.text2 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: white;
+	display: inline-block;
+}
+.text3 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: white;
+	display: inline-block;
+}
+.input1 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: black;
+}
+.button1 {
+	margin: 0px;
+	border-width: 2px;
+	padding: 2px;
+	height: 28px;
+	width: 100px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: black;
+}
+.link1 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: blue;
+}
+.link3 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: white;
+}
+.label1 {
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: black;
+	display: inline-block;
+}
+.label2 {
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: white;
+	display: inline-block;
+}
+.label3 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	color: black;
+	display: inline-block;
+}
+.error1 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: red;
+	display: inline-block;
+}
