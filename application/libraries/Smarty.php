@@ -20,7 +20,7 @@ class CI_Smarty extends Smarty
 		$this->template_dir = APPPATH . "views/templates/";
 		$this->assign('APPPATH', APPPATH);
 		$this->assign('BASEPATH', BASEPATH);
-		$this -> autoload_filters = array('pre' => array('cw_convertSmartyDelimiter'));
+		$this->autoload_filters = array('pre' => array('cw_convertSmartyDelimiter'));
 		log_message('debug', "Smarty Class Initialized");
 	}
 
@@ -50,15 +50,7 @@ class CI_Smarty extends Smarty
 		}
 		if ($return == FALSE)
 		{
-			$CI = &get_instance();
-			if (method_exists($CI->output, 'set_output'))
-			{
-				$CI->output->set_output($this->fetch($template));
-			}
-			else
-			{
-				$CI->output->final_output = $this->fetch($template);
-			}
+			$this->display($template);
 			return;
 		}
 		else

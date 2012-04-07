@@ -372,7 +372,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
      *
      * @var boolean
      */
-    public $debugging = false;
+    public $debugging = true;
     /**
      * This determines if debugging is enable-able from the browser.
      * <ul>
