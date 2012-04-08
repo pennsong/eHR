@@ -23,42 +23,6 @@ class CI_Smarty extends Smarty
 		$this->autoload_filters = array('pre' => array('cw_convertSmartyDelimiter'));
 		log_message('debug', "Smarty Class Initialized");
 	}
-
-	/**
-	 *  Parse a template using the Smarty engine
-	 *
-	 * This is a convenience method that combines assign() and
-	 * display() into one step.
-	 *
-	 * Values to assign are passed in an associative array of
-	 * name => value pairs.
-	 *
-	 * If the output is to be returned as a string to the caller
-	 * instead of being output, pass true as the third parameter.
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	array
-	 * @param	bool
-	 * @return	string
-	 */
-	function view($template, $data = array(), $return = FALSE)
-	{
-		foreach ($data as $key => $val)
-		{
-			$this->assign($key, $val);
-		}
-		if ($return == FALSE)
-		{
-			$this->display($template);
-			return;
-		}
-		else
-		{
-			return $this->fetch($template);
-		}
-	}
-
 }
 
 /* End of file Smarty.php */
