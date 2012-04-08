@@ -155,23 +155,7 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 |
 */
 $config['allow_get_array']		= TRUE;
-if (defined('ENVIRONMENT'))
-{
-	switch (ENVIRONMENT)
-	{
-		case 'development':
-			$config['enable_query_strings'] = TRUE;
-		break;
-	
-		case 'testing':
-		case 'production':
-			$config['enable_query_strings'] = FALSE;
-		break;
-
-		default:
-			exit('The application environment is not set correctly.');
-	}
-}
+$config['enable_query_strings'] = FALSE;
 $config['controller_trigger']	= 'c';
 $config['function_trigger']		= 'm';
 $config['directory_trigger']	= 'd'; // experimental not currently in use
