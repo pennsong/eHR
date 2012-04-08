@@ -11,14 +11,10 @@
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/user.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/template.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/validationEngine.jquery.css" type="text/css" media="screen, projection"/>
-		<script src="{cw_ci_base_url}resource/css/jquery.js" type="text/javascript"></script>
-		<script src="{cw_ci_base_url}resource/css/jquery.validationEngine.js" type="text/javascript"></script>
-		<script src="{cw_ci_base_url}resource/css/languages/jquery.validationEngine-zh_CN.js" type="text/javascript"></script>
+		<script src="{cw_ci_base_url}resource/js/jquery.js" type="text/javascript"></script>
+		<script src="{cw_ci_base_url}resource/js/jquery.validationEngine.js" type="text/javascript"></script>
+		<script src="{cw_ci_base_url}resource/js/jquery.validationEngine-zh_CN.js" type="text/javascript"></script>
 		<style type="text/css" media="screen">
-			body {
-				background-image: url("{cw_ci_base_url}resource/pic/bgfirst.png");
-				background-repeat: repeat-x;
-			}
 			img.logo {
 				height: 30px;
 			}
@@ -81,7 +77,7 @@
 	<body>
 		<div class="container">
 			<div class="span-64 last">
-				  <img class="logo" src="{cw_ci_base_url}resource/pic/logo.png"/>
+				  <img class="logo" src="{cw_ci_base_url}resource/img/logo.png"/>
 			</div>
 			<div class="clear prepend-19 last append-bottom20">
 				<div class="head1">
@@ -109,7 +105,7 @@
 				</div>
 				<div class="clear prepend-19 span-11 inline append-bottom20">
 					<div class="relative">
-						<input id="password" name="password" class="defaultStrContainer input1 validate[required, custom[onlyLetterNumber], minSize[6], maxSize[20]]" type="text" />
+						<input id="password" name="password" class="defaultStrContainer input1 validate[required, custom[onlyLetterNumber], minSize[6], maxSize[20]]" type="password" />
 						<div class="defaultStr defaultStr1 userNameDefaultStr">
 							请输入密码
 						</div>
