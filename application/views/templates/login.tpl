@@ -2,49 +2,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-		<meta content="Boks - 0.5.8" name="generator"/>
-		<title>登录</title>
 		<!-- Framework CSS -->
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/screen.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/print.css" type="text/css" media="print"/>
 		<!--[if lt IE 8]><link rel="stylesheet" href="{cw_ci_base_url}resource/css/ie.css" type="text/css" media="screen, projection"/><![endif]-->
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/user.css" type="text/css" media="screen, projection"/>
+		<!-- jquery -->
+		<script src="{cw_ci_base_url}resource/js/jquery.js" type="text/javascript"></script>
+		<!--validationEngine-->
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/template.css" type="text/css" media="screen, projection"/>
 		<link rel="stylesheet" href="{cw_ci_base_url}resource/css/validationEngine.jquery.css" type="text/css" media="screen, projection"/>
-		<script src="{cw_ci_base_url}resource/js/jquery.js" type="text/javascript"></script>
 		<script src="{cw_ci_base_url}resource/js/jquery.validationEngine.js" type="text/javascript"></script>
 		<script src="{cw_ci_base_url}resource/js/jquery.validationEngine-zh_CN.js" type="text/javascript"></script>
+		<title>登录</title>
 		<style type="text/css" media="screen">
-			img.logo {
+			img.locLogo {
 				height: 30px;
 			}
-			div.userNameDefaultStr {
+			div.locUserNameDefaultStr {
 				left: 2px;
 			}
-			div.generalErrorInfo {
+			div.locGeneralErrorInfo {
 				padding-top: 7px;
 				padding-bottom: 7px;
 				height: 14px;
 			}
-			div.userType {
+			div.locUserType {
 				height: 19px;
 			}
 		</style>
 		<script>
 			$(document).ready(function() {
-				$(".defaultStr").click(function() {
-					$(this).prev(".defaultStrContainer").focus();
+				$(".locDefaultStr").click(function() {
+					$(this).prev(".locDefaultStrContainer").focus();
 				});
-				$(".defaultStrContainer").focus(function() {
-					$(this).next(".defaultStr").hide();
+				$(".locDefaultStrContainer").focus(function() {
+					$(this).next(".locDefaultStr").hide();
 				});
-				$(".defaultStrContainer").blur(function() {
+				$(".locDefaultStrContainer").blur(function() {
 					if($(this).val() == "") {
-						$(this).next(".defaultStr").show();
+						$(this).next(".locDefaultStr").show();
 					}
 				});
-				$(".defaultStrContainer").blur();
-				$("#loginForm").validationEngine();
+				$(".locDefaultStrContainer").blur();
+				$("#locLoginForm").validationEngine();
 			});
 			function checkUserName(field, rules, i, options) {
 				var err = new Array();
@@ -77,14 +78,14 @@
 	<body>
 		<div class="container">
 			<div class="span-64 last">
-				  <img class="logo" src="{cw_ci_base_url}resource/img/logo.png"/>
+				  <img class="locLogo" src="{cw_ci_base_url}resource/img/logo.png"/>
 			</div>
 			<div class="clear prepend-19 last append-bottom20">
 				<div class="head1">
 					欢迎来到E-hiring
 				</div>
 			</div>
-			<form id="loginForm" action="{cw_ci_site_url param1='login/submit_validate'}" method="post">
+			<form id="locLoginForm" action="{cw_ci_site_url param1='login/submit_validate'}" method="post">
 				<div class="clear prepend-19 append-bottom5">
 					<div class="label1">
 						用户名
@@ -92,8 +93,8 @@
 				</div>
 				<div class="clear prepend-19 span-11 inline append-bottom10">
 					<div class="relative">
-						<input id="userName" name="userName" class="defaultStrContainer input1 validate[required, custom[onlyLetterNumberUnderLineDot], minSize[6], maxSize[15], funcCall[checkUserName]]" value="{$smarty.post.userName|default:''}" type="text" />
-						<div class="defaultStr defaultStr1 userNameDefaultStr">
+						<input id="userName" name="userName" class="locDefaultStrContainer input1 validate[required, custom[onlyLetterNumberUnderLineDot], minSize[6], maxSize[15], funcCall[checkUserName]]" value="{$smarty.post.userName|default:''}" type="text" />
+						<div class="locDefaultStr defaultStr1 locUserNameDefaultStr">
 							请输入用户名
 						</div>
 					</div>
@@ -105,8 +106,8 @@
 				</div>
 				<div class="clear prepend-19 span-11 inline append-bottom20">
 					<div class="relative">
-						<input id="password" name="password" class="defaultStrContainer input1 validate[required, custom[onlyLetterNumber], minSize[6], maxSize[20]]" type="password" />
-						<div class="defaultStr defaultStr1 userNameDefaultStr">
+						<input id="password" name="password" class="locDefaultStrContainer input1 validate[required, custom[onlyLetterNumber], minSize[6], maxSize[20]]" type="password" />
+						<div class="locDefaultStr defaultStr1 locUserNameDefaultStr">
 							请输入密码
 						</div>
 					</div>
@@ -116,7 +117,7 @@
 						请选择您的身份
 					</div>
 				</div>
-				<div class="clear prepend-19 append-bottom20 userType">
+				<div class="clear prepend-19 append-bottom20 locUserType">
 					{html_radios name='type' values=$typeId output=$typeName selected=$smarty.post.type|default:1}
 				</div>
 				<div class="clear prepend-19">
@@ -125,7 +126,7 @@
 							进入E-hiring
 						</button>
 					</div>
-					<div class="span-10 generalErrorInfo">
+					<div class="span-10 locGeneralErrorInfo">
 						<div class="error1">
 							 {$loginErrorInfo|default:''}
 						</div>

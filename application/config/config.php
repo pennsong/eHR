@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localehr/ehr/';
+$config['base_url']	= 'http://localehr/eHR/';
 
 /*
 |--------------------------------------------------------------------------
