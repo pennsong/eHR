@@ -1,7 +1,7 @@
 <?php
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-class Login extends CI_Controller
+class Login extends CW_Controller
 {
 	public function __construct()
 	{

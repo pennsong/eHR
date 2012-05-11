@@ -64,7 +64,7 @@ $autoload['libraries'] = array('smarty', 'database', 'session');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array();
+$autoload['helper'] = array('url');
 
 
 /*
