@@ -84,26 +84,21 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	function field_data()
 	{
 		$retval = array();
-		while ($field = mysqli_fetch_object($this->result_id))
+		while ($field = mysqli_fetch_field($this->result_id))
 		{
-			preg_match('/([a-zA-Z]+)(\(\d+\))?/', $field->Type, $matches);
-
-			$type = (array_key_exists(1, $matches)) ? $matches[1] : NULL;
-			$length = (array_key_exists(2, $matches)) ? preg_replace('/[^\d]/', '', $matches[2]) : NULL;
-
 			$F				= new stdClass();
-			$F->name		= $field->Field;
-			$F->type		= $type;
-			$F->default		= $field->Default;
-			$F->max_length	= $length;
-			$F->primary_key = ( $field->Key == 'PRI' ? 1 : 0 );
+			$F->name		= $field->name;
+			$F->type		= $field->type;
+			$F->default		= $field->def;
+			$F->max_length	= $field->max_length;
+			$F->primary_key = ($field->flags & MYSQLI_PRI_KEY_FLAG) ? 1 : 0;
 
 			$retval[] = $F;
 		}
 
 		return $retval;
 	}
-	
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -166,14 +161,68 @@ class CI_DB_mysqli_result extends CI_DB_result {
 	{
 		return mysqli_fetch_object($this->result_id);
 	}
-	
+
+	// --------------------------------------------------------------------
+	/**
+	* Read the next result
+	*
+	* @return	boolean
+	*/
+	function next_result()
+	{
+		if (is_object($this->conn_id))
+		{
+			return mysqli_next_result($this->conn_id);
+		}
+	}
+	// --------------------------------------------------------------------
+	/**
+	* Read the next result
+	*
+	* @return	CI_DB_mysqli_result
+	*/
+	function store_result()
+	{
+		// Load and instantiate the result driver
+		$driver			= 'CI_DB_mysqli_result';
+		$RES			= new $driver();
+		$RES->conn_id	= CI_Controller::get_instance()->db->conn_id;
+		$RES->result_id = mysqli_store_result(CI_Controller::get_instance()->db->conn_id);
+
+		// oci8 vars must be set before calling this
+		$RES->num_rows	= $RES->num_rows();
+
+		// Is query caching enabled?  If so, we'll serialize the
+		// result object and save it to a cache file.
+
+		if (CI_Controller::get_instance()->db->cache_on == TRUE AND CI_Controller::get_instance()->db->_cache_init())
+		{
+			// We'll create a new instance of the result object
+			// only without the platform specific driver since
+			// we can't use it with cached data (the query result
+			// resource ID won't be any good once we've cached the
+			// result object, so we'll have to compile the data
+			// and save it)
+			$CR = new CI_DB_result();
+			$CR->num_rows		= $RES->num_rows();
+			$CR->result_object	= $RES->result_object();
+			$CR->result_array	= $RES->result_array();
+
+			// Reset these since cached objects can not utilize resource IDs.
+			$CR->conn_id		= NULL;
+			$CR->result_id		= NULL;
+
+			$this->CACHE->write($sql, $CR);
+		}
+
+		return $RES;
+	}
 	// --------------------------------------------------------------------
 
 	/**
-	 * Free the all result
+	 * free result sets
 	 *
-	 * @return boolean
-	 * @author penn
+	 * @return 	null
 	 */
 	function free_all()
 	{
