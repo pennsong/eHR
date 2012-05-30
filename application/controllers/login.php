@@ -13,12 +13,12 @@ class Login extends CW_Controller
 	{
 		//set user type
 		$this->smarty->assign('typeId', array(
-				'1',
-				'2'
+			'1',
+			'2'
 		));
 		$this->smarty->assign('typeName', array(
-				'猎头',
-				'企业用户'
+			'猎头',
+			'企业用户'
 		));
 		$this->smarty->display('login.tpl');
 	}
@@ -38,12 +38,11 @@ class Login extends CW_Controller
 			if ($this->session->userdata('type') == 'hunter')
 			{
 				echo "login to hunter";
-				//				redirect(base_url() . 'index.php/hunterMain');
+				redirect(base_url().'index.php/hunterMain');
 			}
 			else if ($this->session->userdata('type') == 'enterpriseUser')
 			{
-				echo "login to enterpriseUser";
-				//				redirect(base_url() . 'index.php/companyMain');
+				redirect(base_url().'index.php/enterpriseMain');
 			}
 		}
 		else
@@ -58,16 +57,16 @@ class Login extends CW_Controller
 	{
 		$this->load->library('form_validation');
 		$config = array(
-				array(
-						'field' => 'userName',
-						'label' => '用户名',
-						'rules' => 'required|callback_username_check1|callback_username_check2|callback_username_check3'
-				),
-				array(
-						'field' => 'password',
-						'label' => '密码',
-						'rules' => 'required|alpha_numeric|min_length[6]|max_length[20]'
-				)
+			array(
+				'field' => 'userName',
+				'label' => '用户名',
+				'rules' => 'required|callback_username_check1|callback_username_check2|callback_username_check3'
+			),
+			array(
+				'field' => 'password',
+				'label' => '密码',
+				'rules' => 'required|alpha_numeric|min_length[6]|max_length[20]'
+			)
 		);
 		$this->form_validation->set_rules($config);
 		$this->form_validation->set_error_delimiters('*', '<br>');

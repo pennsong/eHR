@@ -44,15 +44,15 @@ class CW_Controller extends CI_Controller
 		{
 			if ($this->session->userdata('type') == 'hunter')
 			{
-				$tmpRes = $this->db->query("SELECT * FROM hunter WHERE status=1 AND name='{$this->session->userdata('userAccount')}';");
+				$tmpRes = $this->db->query("SELECT * FROM hunter WHERE active=1 AND name='{$this->session->userdata('userName')}';");
 				if ($tmpRes && $tmpRes->num_rows > 0)
 				{
 					return TRUE;
 				}
 			}
-			else if ($this->session->userdata('type') == 'hr')
+			else if ($this->session->userdata('type') == 'enterpriseUser')
 			{
-				$tmpRes = $this->db->query("SELECT * FROM enterpriseUser WHERE status=1 AND name='{$this->session->userdata('userAccount')}';");
+				$tmpRes = $this->db->query("SELECT * FROM enterpriseUser WHERE active=1 AND name='{$this->session->userdata('userName')}';");
 				if ($tmpRes && $tmpRes->num_rows > 0)
 				{
 					return TRUE;

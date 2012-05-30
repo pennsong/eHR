@@ -6,9 +6,6 @@
 		<!--{$validationEngineHead}-->
 		<title>登录</title>
 		<style type="text/css" media="screen">
-			img.locLogo {
-				height: 30px;
-			}
 			div.locUserNameDefaultStr {
 				left: 2px;
 			}
@@ -68,7 +65,7 @@
 	<body>
 		<div class="container">
 			<div class="span-64 last">
-				  <img class="locLogo" src="{cw_ci_base_url}resource/img/logo.png"/>
+				  <img class="logo" src="{cw_ci_base_url}resource/img/logo.png"/>
 			</div>
 			<div class="clear prepend-19 last append-bottom20">
 				<div class="head1">

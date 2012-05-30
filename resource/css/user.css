@@ -267,3 +267,6 @@
 	color: red;
 	display: inline-block;
 }
+img.logo {
+	height: 30px;
+}
