@@ -1262,6 +1262,20 @@ class CI_Form_validation {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Alpha-numeric-Chinese
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return	bool
+	 */
+	public function alpha_numeric_chinese($str)
+	{
+		return ( ! preg_match("/^([a-z0-9]\u0391-\uFFE5)+$/i", $str)) ? FALSE : TRUE;
+	}
+	
+	// --------------------------------------------------------------------
+
+	/**
 	 * Valid Base64
 	 *
 	 * Tests a string for characters outside of the Base64 alphabet
