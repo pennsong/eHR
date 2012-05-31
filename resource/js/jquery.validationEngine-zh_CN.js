@@ -167,6 +167,11 @@
 				"onlyLetterNumberUnderLineDot" : {
 					"regex" : /^[0-9a-zA-Z_\.]+$/,
 					"alertText" : "* 只允许英文字母，数字，下划线和点"
+				},
+				//add by penn
+				"onlyNumberLetterChinese" : {
+					"regex" : /^[0-9a-zA-Z\u0391-\uFFE5]+$/,
+					"alertText" : "* 只允许数字，字母和中文"
 				}
 			};
 		}
