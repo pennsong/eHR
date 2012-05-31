@@ -267,6 +267,15 @@
 	color: red;
 	display: inline-block;
 }
+.ok1 {
+	height: 14px;
+	line-height: 14px;
+	font-size: 14px;
+	font-family: 'Helvetica Neue', Arial, Helvetica, 'Liberation Sans', FreeSans, sans-serif;
+	font-weight: bold;
+	color: green;
+	display: inline-block;
+}
 img.logo {
 	height: 30px;
 }
