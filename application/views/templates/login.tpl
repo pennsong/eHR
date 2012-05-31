@@ -32,7 +32,10 @@
 					}
 				});
 				$(".locDefaultStrContainer").blur();
-				$("#locLoginForm").validationEngine();
+				$("#locLoginForm").validationEngine('attach', {
+					promptPosition : "centerRight",
+					autoPositionUpdate : "true"
+				});
 			});
 			function checkUserName(field, rules, i, options) {
 				var err = new Array();

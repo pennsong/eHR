@@ -8,7 +8,15 @@
 				text-align: center;
 			}
 		</style>
-		<script></script>
+		<script>
+			function openWindow() {
+				var browser = navigator.appName;
+				if(browser == "Microsoft Internet Explorer") {
+					window.opener = self;
+				}
+				window.open("{cw_ci_site_url param1='updateEnterpriseInfo/index'}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
+			}
+		</script>
 	</head>
 	<body>
 		<div class="container ">
@@ -17,72 +25,72 @@
 					<img class="" src="{cw_ci_base_url}resource/img/logo.png"/>
 				</div>
 				<div class="span-12">
-					<a href="{cw_ci_site_url param1='updateEnterpriseInfo/index'}" target="_blank">欢迎您,公司用户:{$userName}</a>
-					</div>
-					<div class="span-3">
+					<a href="#" onclick="openWindow()">欢迎您,公司用户:{$userName}</a>
+				</div>
+				<div class="span-3">
 					<a href="{cw_ci_site_url param1='login/logout'}">退出</a>
-					</div>
-					</div>
-					<div class="prepend-top span-64 last">
-					<div class="prepend-2 span-60">
+				</div>
+			</div>
+			<div class="prepend-top span-64 last">
+				<div class="prepend-2 span-60">
 					<div class="span-60">
-					<div class="span-20">
-					<h3 class="locHMiddle">招聘职位</h3>
-					</div>
-					<div class="span-40">
-					<h3 class="locHMiddle">状态</h3>
-					</div>
+						<div class="span-20">
+							<h3 class="locHMiddle">招聘职位</h3>
+						</div>
+						<div class="span-40">
+							<h3 class="locHMiddle">状态</h3>
+						</div>
 					</div>
 					<div class="span-60">
-					<div class="span-20">
-					&nbsp;
-					</div>
-					<div class="span-40">
-					<div class="span-8 locHMiddle">
-					<span class="text1">推荐人数</span>
-					</div>
-					<div class="span-8 locHMiddle">
-					<span class="text1">需求人数</span>
-					</div>
-					<div class="span-8 locHMiddle">
-					<span class="text1">选中人数</span>
-					</div>
-					</div>
+						<div class="span-20">
+							&nbsp;
+						</div>
+						<div class="span-40">
+							<div class="span-8 locHMiddle">
+								<span class="text1">推荐人数</span>
+							</div>
+							<div class="span-8 locHMiddle">
+								<span class="text1">需求人数</span>
+							</div>
+							<div class="span-8 locHMiddle">
+								<span class="text1">选中人数</span>
+							</div>
+						</div>
 					</div>
 					<!--{foreach $jobList as $job}-->
 					<div class="span-60">
-					<div class="span-20">
-					<span class="text1">{$job['title']}</span>
-					</div>
-					<div class="span-40">
-					<div class="span-8 locHMiddle">
-					<a class="text1" href="#{$job['id']}">{$job['fitNum']}</a>
-					</div>
-					<div class="span-8 locHMiddle">
-					<a class="text1" href="#{$job['id']}">{$job['requireNumber']}</a>
-					</div>
-					<div class="span-8 locHMiddle">
-					<a class="text1" href="#{$job['id']}">{$job['choseNum']}</a>
-					</div>
-					<div class="span-8">
-					<a class="link1" href="#{$job['id']}">挑选人才</a>
-					</div>
-					<div class="span-8">
-					<a class="text1" href="#{$job['id']}">管理人才</a>
-					</div>
-					</div>
+						<div class="span-20">
+							<span class="text1">{$job['title']}</span>
+						</div>
+						<div class="span-40">
+							<div class="span-8 locHMiddle">
+								<a class="text1" href="#{$job['id']}">{$job['fitNum']}</a>
+							</div>
+							<div class="span-8 locHMiddle">
+								<a class="text1" href="#{$job['id']}">{$job['requireNumber']}</a>
+							</div>
+							<div class="span-8 locHMiddle">
+								<a class="text1" href="#{$job['id']}">{$job['choseNum']}</a>
+							</div>
+							<div class="span-8">
+								<a class="link1" href="#{$job['id']}">挑选人才</a>
+							</div>
+							<div class="span-8">
+								<a class="text1" href="#{$job['id']}">管理人才</a>
+							</div>
+						</div>
 					</div>
 					<!--{/foreach}-->
-					</div>
-					<div class="prepend-top  prepend-2 span-60">
+				</div>
+				<div class="prepend-top  prepend-2 span-60">
 					<div class="prepend-44 span-8">
-					<a class="link1" href="#">查看现有职位</a>
+						<a class="link1" href="#">查看现有职位</a>
 					</div>
 					<div class="span-8">
-					<a class="link1" href="#">创建新职位</a>
+						<a class="link1" href="#">创建新职位</a>
 					</div>
-					</div>
-					</div>
-					</div>
-					</body>
-					</html>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
