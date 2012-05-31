@@ -11,6 +11,7 @@ $lang['max_length']			= "%s最多%s个字符.";
 $lang['exact_length']		= "%s必须为%s个字符.";
 $lang['alpha']				= "%s只能包含字母.";
 $lang['alpha_numeric']		= "%s只能包含字母和数字.";
+$lang['alpha_numeric_chinese']		= "%s只能包含字母,数字和中文.";
 $lang['alpha_dash']			= "%s只能包含字母,数字,下划线和斜杠.";
 $lang['numeric']			= "%s只能包含数字.";
 $lang['is_numeric']			= "%s只能包含数字字符.";
