@@ -108,7 +108,8 @@
 					</div>
 				</div>
 				<div class="clear prepend-19 append-bottom20 locUserType">
-					{html_radios name='type' values=$typeId output=$typeName selected=$smarty.post.type|default:1}
+					<div class="span-10 label1">{html_radios name='type' values=$typeId output=$typeName labels=FALSE selected=$type|default:1}</div>
+					<a href="{cw_ci_site_url param1='hunterInfo/noLogin_register'}">注册小猎头</a>
 				</div>
 				<div class="clear prepend-19">
 					<div class="inline span-7">

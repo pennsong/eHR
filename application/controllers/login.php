@@ -7,6 +7,7 @@ class Login extends CW_Controller
 	{
 		parent::__construct();
 		$this->load->helper('form');
+		$this->load->helper('cookie');
 	}
 
 	public function index()
@@ -20,6 +21,10 @@ class Login extends CW_Controller
 			'猎头',
 			'企业用户'
 		));
+		if ($this->input->cookie('type'))
+		{
+			$this->smarty->assign('type', $this->input->cookie('type'));
+		}
 		$this->smarty->display('login.tpl');
 	}
 
@@ -35,9 +40,9 @@ class Login extends CW_Controller
 		if ($this->authenticate($var))
 		{
 			//登录成功
+			$this->input->set_cookie('type', $this->input->post('type'), 3600*24*30);
 			if ($this->session->userdata('type') == 'hunter')
 			{
-				echo "login to hunter";
 				redirect(base_url().'index.php/hunterMain');
 			}
 			else if ($this->session->userdata('type') == 'enterpriseUser')

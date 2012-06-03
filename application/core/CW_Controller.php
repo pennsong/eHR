@@ -36,7 +36,7 @@ class CW_Controller extends CI_Controller
 
 	public function _checkLogin()
 	{
-		if ($this->uri->segment(1) == 'login')
+		if ($this->uri->segment(1) == 'login' || strpos($this->uri->segment(2), 'noLogin') == 0)
 		{
 			return TRUE;
 		}
