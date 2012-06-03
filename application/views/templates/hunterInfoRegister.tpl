@@ -83,6 +83,9 @@
 	</head>
 	<body>
 		<div class="container">
+			<div class="span-64 last">
+				  <img class="logo" src="{cw_ci_base_url}resource/img/logo.png"/>
+			</div>
 			<div class="prepend-1 span-62">
 				<form id="locHunterRegisterForm" action="{cw_ci_site_url param1='hunterInfo/noLogin_registerValidate'}" method="post">
 					<div class="span-62">
