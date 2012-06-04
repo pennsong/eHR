@@ -18,8 +18,8 @@ class EnterpriseMain extends CW_Controller
 		//取得职位列表
 		$query = $this->db->query('CALL getJobListForSpecialEnterpriseUser(?, ?, ?)', array(
 			$this->session->userdata('userId'),
-			0,
-			10
+			NULL,
+			NULL
 		));
 		$jobList = $query->result_array();
 		$query->free_all();

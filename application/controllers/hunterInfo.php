@@ -47,8 +47,7 @@ class hunterInfo extends CW_Controller
 			));
 			if ($query->first_row()->result == 1)
 			{
-				echo "new Hunter create!";
-				print_r($hunterInfo);
+				redirect(base_url()."index.php/login/login2/{$hunterInfo['name']}/{$hunterInfo['password']}");
 			}
 			else
 			{

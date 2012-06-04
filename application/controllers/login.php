@@ -34,13 +34,21 @@ class Login extends CW_Controller
 		redirect(base_url()."index.php/login");
 	}
 
+	public function login2($userName = null, $password = null, $type = 1)
+	{
+		$_POST['type'] = $type;
+		$_POST['userName'] = $userName;
+		$_POST['password'] = $password;
+		$this->submit_validate();
+	}
+
 	public function submit_validate()
 	{
 		$var = '';
 		if ($this->authenticate($var))
 		{
 			//登录成功
-			$this->input->set_cookie('type', $this->input->post('type'), 3600*24*30);
+			$this->input->set_cookie('type', $this->input->post('type'), 3600 * 24 * 30);
 			if ($this->session->userdata('type') == 'hunter')
 			{
 				redirect(base_url().'index.php/hunterMain');
