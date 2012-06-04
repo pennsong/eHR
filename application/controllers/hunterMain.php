@@ -13,7 +13,7 @@ class HunterMain extends CW_Controller
 		//取得猎头名称
 		$this->smarty->assign('userName', $this->session->userdata('userName'));
 		//取得企业列表
-		$query = $this->db->query('CALL getEnterpriseListForSpecialHunter(?, ?, ?)', array(
+		$query = $this->db->query('CALL getEnterpriseListF_hunter(?, ?, ?)', array(
 			$this->session->userdata('userId'),
 			NULL,
 			NULL
@@ -24,14 +24,14 @@ class HunterMain extends CW_Controller
 		{
 			//取得该企业各状态人数
 			//面试人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				2
 			));
 			$interview2 = $query->first_row()->num;
 			$query->free_all();
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				3
@@ -40,14 +40,14 @@ class HunterMain extends CW_Controller
 			$query->free_all();
 			$enterprise['interviewNum'] = $interview2 + $interview3;
 			//offer人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				6
 			));
 			$offer6 = $query->first_row()->num;
 			$query->free_all();
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				7
@@ -56,7 +56,7 @@ class HunterMain extends CW_Controller
 			$query->free_all();
 			$enterprise['offerNum'] = $offer6 + $offer7;
 			//到岗人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				9
@@ -65,7 +65,7 @@ class HunterMain extends CW_Controller
 			$query->free_all();
 			$enterprise['onboardNum'] = $onboard;
 			//待定人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				1
@@ -74,7 +74,7 @@ class HunterMain extends CW_Controller
 			$query->free_all();
 			$enterprise['todoNum'] = $todo;
 			//被动拒绝人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				5
@@ -83,21 +83,21 @@ class HunterMain extends CW_Controller
 			$query->free_all();
 			$enterprise['rejectedNum'] = $rejected;
 			//被动拒绝人数
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				4
 			));
 			$reject4 = $query->first_row()->num;
 			$query->free_all();
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				8
 			));
 			$reject8 = $query->first_row()->num;
 			$query->free_all();
-			$query = $this->db->query('CALL getNumForSpecialHunter_enterprise_dealStatus(?, ?, ?)', array(
+			$query = $this->db->query('CALL getNumF_hunter_enterprise_dealStatus(?, ?, ?)', array(
 				$this->session->userdata('userId'),
 				$enterprise['id'],
 				11

@@ -32,7 +32,7 @@ class hunterInfo extends CW_Controller
 		{
 			//数据验证成功
 			//插入新猎头数据
-			$query = $this->db->query('SELECT createNewHunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			$query = $this->db->query('SELECT createHunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
 				strtolower($hunterInfo['name']),
 				strtolower($hunterInfo['password']),
 				$hunterInfo['fixphone1'],
