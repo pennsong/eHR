@@ -40,7 +40,7 @@ class EnterpriseInfo extends CW_Controller
 		}
 		else
 		{
-			//登录失败
+			//失败
 			$this->smarty->assign('errorMsg', $var);
 		}
 		$this->smarty->display('updateEnterprise.tpl');
@@ -63,7 +63,7 @@ class EnterpriseInfo extends CW_Controller
 			$phone = $this->input->post('phone');
 			$mail = $this->input->post('mail');
 			$address = $this->input->post('address');
-			$introduction = $this->input->post('introducation');
+			$introduction = $this->input->post('introduction');
 			$query = $this->db->query('SELECT updateEnterprise(?, ?, ?, ?, ?, ?) result', array(
 				$enterprise,
 				$name,

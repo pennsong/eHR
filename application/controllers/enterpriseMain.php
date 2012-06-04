@@ -14,7 +14,7 @@ class EnterpriseMain extends CW_Controller
 		$query = $this->db->query('SELECT enterprise FROM enterpriseUser WHERE active = 1 AND id = ?', array($this->session->userdata('userId')));
 		$enterpriseId = $query->first_row()->enterprise;
 		$query = $this->db->query('SELECT name FROM enterprise WHERE active = 1 AND id = ?', array($enterpriseId));
-		$this->smarty->assign('userName', $enterpriseId = $query->first_row()->name);
+		$this->smarty->assign('userName', $query->first_row()->name);
 		//取得职位列表
 		$query = $this->db->query('CALL getJobListF_enterpriseUser(?, ?, ?)', array(
 			$this->session->userdata('userId'),
@@ -25,7 +25,7 @@ class EnterpriseMain extends CW_Controller
 		$query->free_all();
 		foreach ($jobList as &$job)
 		{
-			$query = $this->db->query('CALL getFitTalentNumF_job(?)', array($job['id']));
+			$query = $this->db->query('CALL getFitTalentF_job(?, ?)', array($job['id'], TRUE));
 			$job['fitNum'] = $query->first_row()->num;
 			$query->free_all();
 			$query = $this->db->query('CALL getChosenTalentNumF_job(?)', array($job['id']));

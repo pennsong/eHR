@@ -64,7 +64,7 @@
 						</div>
 						<div class="span-40">
 							<div class="span-8 locHMiddle">
-								<a class="text1" href="#{$job['id']}">{$job['fitNum']}</a>
+								<a class="text1" href="{cw_ci_site_url param1='enterpriseSearchF_job/index'}/{$job['id']}">{$job['fitNum']}</a>
 							</div>
 							<div class="span-8 locHMiddle">
 								<a class="text1" href="#{$job['id']}">{$job['requireNumber']}</a>
