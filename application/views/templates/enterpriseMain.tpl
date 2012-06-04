@@ -14,7 +14,7 @@
 				if(browser == "Microsoft Internet Explorer") {
 					window.opener = self;
 				}
-				window.open("{cw_ci_site_url param1='updateEnterpriseInfo/index'}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
+				window.open("{cw_ci_site_url param1='enterpriseInfo/index'}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
 			}
 		</script>
 	</head>

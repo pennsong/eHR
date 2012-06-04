@@ -1,7 +1,7 @@
 <?php
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-class UpdateEnterpriseInfo extends CW_Controller
+class EnterpriseInfo extends CW_Controller
 {
 	public function __construct()
 	{
@@ -20,10 +20,10 @@ class UpdateEnterpriseInfo extends CW_Controller
 		//取得公司信息
 		$query = $this->db->query('SELECT * FROM enterprise WHERE active =1 AND id = ?', $enterpriseId);
 		$this->smarty->assign('enterpriseInfo', $query->first_row('array'));
-		$this->smarty->display('updateEnterpriseInfo.tpl');
+		$this->smarty->display('updateEnterprise.tpl');
 	}
 
-	public function submit_validate()
+	public function validateUpdate()
 	{
 		$var = '';
 		$enterpriseInfo['id'] = $this->input->post('enterprise');
@@ -43,7 +43,7 @@ class UpdateEnterpriseInfo extends CW_Controller
 			//登录失败
 			$this->smarty->assign('errorMsg', $var);
 		}
-		$this->smarty->display('updateEnterpriseInfo.tpl');
+		$this->smarty->display('updateEnterprise.tpl');
 	}
 
 	public function authenticate(&$var)

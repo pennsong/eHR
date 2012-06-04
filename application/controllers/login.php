@@ -39,10 +39,10 @@ class Login extends CW_Controller
 		$_POST['type'] = $type;
 		$_POST['userName'] = $userName;
 		$_POST['password'] = $password;
-		$this->submit_validate();
+		$this->validateLogin();
 	}
 
-	public function submit_validate()
+	public function validateLogin()
 	{
 		$var = '';
 		if ($this->authenticate($var))
@@ -73,7 +73,7 @@ class Login extends CW_Controller
 			array(
 				'field' => 'userName',
 				'label' => '用户名',
-				'rules' => 'required|callback_username_check1|callback_username_check2|callback_username_check3'
+				'rules' => 'required|callback_checkUsername1|callback_checkUsername2|callback_checkUsername3'
 			),
 			array(
 				'field' => 'password',
@@ -94,12 +94,12 @@ class Login extends CW_Controller
 		}
 	}
 
-	public function username_check1($str)
+	public function checkUsername1($str)
 	{
 		$r1 = preg_match("/^[\w\.]{6,15}$/", $str);
 		if ($r1 == 0)
 		{
-			$this->form_validation->set_message('username_check1', '%s 只能包含英文字母，数字，下划线和点,长度为6-15.');
+			$this->form_validation->set_message('checkUsername1', '%s 只能包含英文字母，数字，下划线和点,长度为6-15.');
 			return FALSE;
 		}
 		else
@@ -108,13 +108,13 @@ class Login extends CW_Controller
 		}
 	}
 
-	public function username_check2($str)
+	public function checkUsername2($str)
 	{
 		$docNum = substr_count($str, '.');
 		$lineNum = substr_count($str, '_');
 		if ($docNum + $lineNum > 1)
 		{
-			$this->form_validation->set_message('username_check2', '%s 只能包含一个下划线或点.');
+			$this->form_validation->set_message('checkUsername2', '%s 只能包含一个下划线或点.');
 			return FALSE;
 		}
 		else
@@ -123,7 +123,7 @@ class Login extends CW_Controller
 		}
 	}
 
-	public function username_check3($str)
+	public function checkUsername3($str)
 	{
 		$r1 = preg_match("/^\..*/", $str);
 		$r2 = preg_match("/^_.*/", $str);
@@ -131,7 +131,7 @@ class Login extends CW_Controller
 		$r4 = preg_match("/.*_$/", $str);
 		if ($r1 || $r2 || $r3 || $r4)
 		{
-			$this->form_validation->set_message('username_check3', '%s 不能以下划线或点开始或结束.');
+			$this->form_validation->set_message('checkUsername3', '%s 不能以下划线或点开始或结束.');
 			return FALSE;
 		}
 		else

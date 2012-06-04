@@ -75,7 +75,7 @@
 					欢迎来到E-hiring
 				</div>
 			</div>
-			<form id="locLoginForm" action="{cw_ci_site_url param1='login/submit_validate'}" method="post">
+			<form id="locLoginForm" action="{cw_ci_site_url param1='login/validateLogin'}" method="post">
 				<div class="clear prepend-19 append-bottom5">
 					<div class="label1">
 						用户名

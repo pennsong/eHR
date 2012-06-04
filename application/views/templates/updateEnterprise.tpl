@@ -22,7 +22,7 @@
 	<body>
 		<div class="container locContainer">
 			<div class="span-30">
-				<form id="enterpriseInfoForm" action="{cw_ci_site_url param1='updateEnterpriseInfo/submit_validate'}" method="post">
+				<form id="enterpriseInfoForm" action="{cw_ci_site_url param1='enterpriseInfo/validateUpdate'}" method="post">
 					<div class="span-30">
 						<input type="hidden" id="enterprise" name="enterprise" value="{$enterpriseInfo['id']}"/>
 					</div>

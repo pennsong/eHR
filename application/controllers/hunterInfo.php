@@ -10,10 +10,10 @@ class hunterInfo extends CW_Controller
 
 	public function noLogin_register()
 	{
-		$this->smarty->display('hunterInfoRegister.tpl');
+		$this->smarty->display('registerHunter.tpl');
 	}
 
-	public function noLogin_registerValidate()
+	public function noLogin_validateRegister()
 	{
 		$var = '';
 		$hunterInfo['name'] = $this->input->post('name');
@@ -53,7 +53,7 @@ class hunterInfo extends CW_Controller
 			{
 				$var = '数据保存失败!';
 				$this->smarty->assign('errorMsg', $var);
-				$this->smarty->display('hunterInfoRegister.tpl');
+				$this->smarty->display('registerHunter.tpl');
 			}
 		}
 		else
@@ -61,7 +61,7 @@ class hunterInfo extends CW_Controller
 			//数据验证失败
 			$this->smarty->assign('hunterInfo', $hunterInfo);
 			$this->smarty->assign('errorMsg', $var);
-			$this->smarty->display('hunterInfoRegister.tpl');
+			$this->smarty->display('registerHunter.tpl');
 		}
 	}
 
@@ -87,7 +87,7 @@ class hunterInfo extends CW_Controller
 			array(
 				'field' => 'name',
 				'label' => '用户名',
-				'rules' => 'required|alpha_numeric|min_length[6]|max_length[14]|callback_nameExistingCheck'
+				'rules' => 'required|alpha_numeric|min_length[6]|max_length[14]|callback_checkNameExisting'
 			),
 			array(
 				'field' => 'password',
@@ -127,7 +127,7 @@ class hunterInfo extends CW_Controller
 			array(
 				'field' => 'idNo',
 				'label' => '身份证号码',
-				'rules' => 'required|callback_idNoCheck'
+				'rules' => 'required|callback_checkIdNo'
 			),
 			array(
 				'field' => 'address',
@@ -158,12 +158,12 @@ class hunterInfo extends CW_Controller
 		}
 	}
 
-	public function nameExistingCheck($str)
+	public function checkNameExisting($str)
 	{
 		$request = $this->db->query('SELECT * FROM hunter WHERE name = ?', strtolower($str));
 		if ($request->num_rows() > 0)
 		{
-			$this->form_validation->set_message('nameExistingCheck', '%s用户名已存在，请重新输入');
+			$this->form_validation->set_message('checkNameExisting', '%s用户名已存在，请重新输入');
 			return FALSE;
 		}
 		else
@@ -172,12 +172,12 @@ class hunterInfo extends CW_Controller
 		}
 	}
 
-	public function mobileCheck($str)
+	public function checkMobile($str)
 	{
 		$r1 = preg_match("/^1[3581].*$/", $str);
 		if ($r1 == 0)
 		{
-			$this->form_validation->set_message('mobileCheck', '手机号码填写错误，请重新填写');
+			$this->form_validation->set_message('checkMobile', '手机号码填写错误，请重新填写');
 			return FALSE;
 		}
 		else
@@ -186,33 +186,33 @@ class hunterInfo extends CW_Controller
 		}
 	}
 
-	public function idNoCheck($str)
+	public function checkIdNo($str)
 	{
 		if (strlen($str) != 15 && strlen($str) != 18)
 		{
-			$this->form_validation->set_message('idNoCheck', '身份证号码位数错误，请重新填写');
+			$this->form_validation->set_message('checkIdNo', '身份证号码位数错误，请重新填写');
 			return FALSE;
 		}
 		else
 		{
 			if (strlen($str) == 15)
 			{
-				$str = $this->idcard_15to18($str);
+				$str = $this->_idcard_15to18($str);
 			}
-			if ($this->idcard_checksum18($str))
+			if ($this->_idcard_checksum18($str))
 			{
 				return TRUE;
 			}
 			else
 			{
-				$this->form_validation->set_message('idNoCheck', '身份证号码填写错误，请重新填写');
+				$this->form_validation->set_message('checkIdNo', '身份证号码填写错误，请重新填写');
 				return FALSE;
 			}
 		}
 	}
 
 	// 计算身份证校验码，根据国家标准GB 11643-1999
-	function idcard_verify_number($idcard_base)
+	private function _idcard_verify_number($idcard_base)
 	{
 		if (strlen($idcard_base) != 17)
 		{
@@ -263,7 +263,7 @@ class hunterInfo extends CW_Controller
 	}
 
 	// 将15位身份证升级到18位
-	function idcard_15to18($idcard)
+	private function _idcard_15to18($idcard)
 	{
 		if (strlen($idcard) != 15)
 		{
@@ -286,19 +286,19 @@ class hunterInfo extends CW_Controller
 				$idcard = substr($idcard, 0, 6).'19'.substr($idcard, 6, 9);
 			}
 		}
-		$idcard = $idcard.$this->idcard_verify_number($idcard);
+		$idcard = $idcard.$this->_idcard_verify_number($idcard);
 		return $idcard;
 	}
 
 	// 18位身份证校验码有效性检查
-	function idcard_checksum18($idcard)
+	private function _idcard_checksum18($idcard)
 	{
 		if (strlen($idcard) != 18)
 		{
 			return FALSE;
 		}
 		$idcard_base = substr($idcard, 0, 17);
-		if ($this->idcard_verify_number($idcard_base) != strtoupper(substr($idcard, 17, 1)))
+		if ($this->_idcard_verify_number($idcard_base) != strtoupper(substr($idcard, 17, 1)))
 		{
 			return FALSE;
 		}
