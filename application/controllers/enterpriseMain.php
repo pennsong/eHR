@@ -25,7 +25,7 @@ class EnterpriseMain extends CW_Controller
 		$query->free_all();
 		foreach ($jobList as &$job)
 		{
-			$query = $this->db->query('CALL getFitTalentF_job(?, ?)', array($job['id'], TRUE));
+			$query = $this->db->query('CALL getFitTalentF_job(?, ?, NULL, NULL)', array($job['id'], TRUE));
 			$job['fitNum'] = $query->first_row()->num;
 			$query->free_all();
 			$query = $this->db->query('CALL getChosenTalentNumF_job(?)', array($job['id']));

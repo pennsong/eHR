@@ -25,11 +25,31 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->assign('sexList', $query->result_array());
 		//取得身高列表
 		$heightList = array(
-			1 => '150cm以下',
-			2 => '151cm-160cm',
-			3 => '161cm-170cm',
-			4 => '171cm-180cm',
-			5 => '180cm以上'
+			1 => array(
+				'150cm以下',
+				'',
+				150
+			),
+			2 => array(
+				'151cm-160cm',
+				151,
+				160
+			),
+			3 => array(
+				'161cm-170cm',
+				161,
+				170
+			),
+			4 => array(
+				'171cm-180cm',
+				171,
+				180
+			),
+			5 => array(
+				'180cm以上',
+				181,
+				''
+			)
 		);
 		$this->smarty->assign('heightList', $heightList);
 		//取得学历列表
@@ -43,31 +63,72 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->assign('expressionList', $query->result_array());
 	}
 
-	public function index($jobId)
+	public function index($jobId, $offset = 0, $limit = 10)
 	{
 		$this->initPage($jobId);
-		//取得符合条件人才信息
-		$query = $this->db->query('CALL getFitTalentF_job(?, ?)', array(
+		//处理分页
+		$this->load->library('pagination');
+		$config['base_url'] = site_url('enterpriseSearchF_job/index/'.$jobId);
+		$config['uri_segment'] = 4;
+		//取得符合条件人才信息条数
+		$query = $this->db->query('CALL getFitTalentF_job(?, ?, NULL, NULL)', array(
 			$jobId,
-			NULL
+			TRUE
 		));
-		$this->smarty->assign('talentList', $query->result_array());
+		$config['total_rows'] = $query->first_row()->num;
 		$query->free_all();
+		$config['per_page'] = '10';
+		$this->pagination->initialize($config);
+		//取得符合条件人才信息
+		$query = $this->db->query('CALL getFitTalentF_job(?, ?, ?, ?)', array(
+			$jobId,
+			NULL,
+			$offset,
+			$limit
+		));
+		$talentList = $query->result_array();
+		$query->free_all();
+		//取得人才信息
+		foreach ($talentList as &$talent)
+		{
+			//取得人才适合城市信息
+			$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
+			$talent['cityList'] = '';
+			foreach ($query->result_array() as $city)
+			{
+				$talent['cityList'] .= $city['cityName'].",";
+			}
+			$query->free_all();
+			//取得人才适合商区信息
+			$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent['id']));
+			$talent['businessAreaList'] = '';
+			foreach ($query->result_array() as $city)
+			{
+				$talent['businessAreaList'] .= $city['businessAreaName'];
+			}
+			$query->free_all();
+			//取得人才信息
+			$query = $this->db->query('CALL getInfoF_talent(?)', array($talent['id']));
+			$talent = array_merge($talent, $query->first_row('array'));
+			$query->free_all();
+		}
+		$this->smarty->assign('talentList', $talentList);
 		$this->smarty->display('enterpriseSearchF_job.tpl');
 	}
 
-	public function search()
+	public function search($offset = 0, $limit = 10)
 	{
 		$this->load->helper('string_helper');
 		$jobId = emptyToNull($this->input->post('jobId'));
 		$this->initPage($jobId);
 		$hunter = emptyToNull($this->input->post('hunter'));
-		$keyWord = emptyToNull($this->input->post('keyWordD'));
+		$keyWord = emptyToNull($this->input->post('keyWord'));
 		$city = emptyToNull($this->input->post('city'));
 		$businessArea = emptyToNull($this->input->post('businessArea'));
 		$sex = emptyToNull($this->input->post('sex'));
 		$ageFrom = emptyToNull($this->input->post('ageFrom'));
 		$ageTo = emptyToNull($this->input->post('ageTo'));
+		$height = emptyToNull($this->input->post('height'));
 		$heightFrom = emptyToNull($this->input->post('heightFrom'));
 		$heightTo = emptyToNull($this->input->post('heightTo'));
 		$education = emptyToNull($this->input->post('education'));
@@ -84,9 +145,16 @@ class EnterpriseSearchF_job extends CW_Controller
 		{
 			$city = NULL;
 		}
-		//取得符合条件人才信息
-		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
+		//处理分页
+		$this->load->library('pagination');
+		$config['full_tag_open'] = '<div class="locPage">';
+		$config['full_tag_close'] = '</div>';
+		$config['base_url'] = site_url('enterpriseSearchF_job/search/');
+		$config['uri_segment'] = 3;
+		//取得符合条件人才信息条数
+		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
 			$jobId,
+			$keyWord,
 			$hunter,
 			$sex,
 			$heightFrom,
@@ -96,11 +164,58 @@ class EnterpriseSearchF_job extends CW_Controller
 			$expression,
 			$city,
 			$businessArea,
+			TRUE,
 			NULL,
 			NULL
 		));
-		$this->smarty->assign('talentList', $query->result_array());
+		$config['total_rows'] = $query->first_row()->num;
 		$query->free_all();
+		$config['per_page'] = '10';
+		$this->pagination->initialize($config);
+		//取得符合条件人才信息
+		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
+			$jobId,
+			$keyWord,
+			$hunter,
+			$sex,
+			$heightFrom,
+			$heightTo,
+			$education,
+			$appearance,
+			$expression,
+			$city,
+			$businessArea,
+			FALSE,
+			$offset,
+			$limit
+		));
+		$talentList = $query->result_array();
+		$query->free_all();
+		//取得人才信息
+		foreach ($talentList as &$talent)
+		{
+			//取得人才适合城市信息
+			$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
+			$talent['cityList'] = '';
+			foreach ($query->result_array() as $city)
+			{
+				$talent['cityList'] .= $city['cityName'].",";
+			}
+			$query->free_all();
+			//取得人才适合商区信息
+			$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent['id']));
+			$talent['businessAreaList'] = '';
+			foreach ($query->result_array() as $city)
+			{
+				$talent['businessAreaList'] .= $city['businessAreaName'];
+			}
+			$query->free_all();
+			//取得人才信息
+			$query = $this->db->query('CALL getInfoF_talent(?)', array($talent['id']));
+			$talent = array_merge($talent, $query->first_row('array'));
+			$query->free_all();
+		}
+		$this->smarty->assign('talentList', $talentList);
 		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->display('enterpriseSearchF_job.tpl');
 	}
@@ -117,6 +232,11 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 		$this->smarty->assign('businessAreaList', $query->result_array());
 		$this->smarty->display('businessAreaList.tpl');
+	}
+
+	public function getTalentDetailContent($talent)
+	{
+		echo "talentId:".$talent;
 	}
 
 }

@@ -8,6 +8,25 @@
 			.locSelected {
 				background: yellow;
 			}
+			.locDrawContainer {
+				position: relative;
+			}
+			.locDraw {
+				position: absolute;
+				background-color: #FF0000;
+				left: 490px;
+				top: 0px;
+				width: 420px;
+				height: 500px;
+				z-index: 1000;
+				padding-left: 10px;
+				padding-right: 10px;
+				overflow: hidden;
+				display: none;
+			}
+			.locExtend {
+				text-decoration: none;
+			}
 		</style>
 		<script>
 			function openWindow() {
@@ -20,6 +39,19 @@
 
 
 			$(document).ready(function() {
+				//设置搜索框默认显示文字
+				$(".locDefaultStr").click(function() {
+					$(this).prev(".locDefaultStrContainer").focus();
+				});
+				$(".locDefaultStrContainer").focus(function() {
+					$(this).next(".locDefaultStr").hide();
+				});
+				$(".locDefaultStrContainer").blur(function() {
+					if($(this).val() == "") {
+						$(this).next(".locDefaultStr").show();
+					}
+				});
+				$(".locDefaultStrContainer").blur();
 				//设置选中状态
 				//城市
 				/*{if isset($smarty.post.city)}*/
@@ -30,6 +62,31 @@
 				/*{if isset($smarty.post.businessArea)}*/
 				var curAttr = $(".locBusinessArea[idValue={$smarty.post.businessArea}]").attr('class');
 				$(".locBusinessArea[idValue={$smarty.post.businessArea}]").attr('class', curAttr + ' locSelected');
+				/*{/if}*/
+				//性别
+				/*{if isset($smarty.post.sex)}*/
+				var curAttr = $(".locSex[idValue={$smarty.post.sex}]").attr('class');
+				$(".locSex[idValue={$smarty.post.sex}]").attr('class', curAttr + ' locSelected');
+				/*{/if}*/
+				//身高
+				/*{if isset($smarty.post.height)}*/
+				var curAttr = $(".locHeight[idValue={$smarty.post.height}]").attr('class');
+				$(".locHeight[idValue={$smarty.post.height}]").attr('class', curAttr + ' locSelected');
+				/*{/if}*/
+				//学历
+				/*{if isset($smarty.post.education)}*/
+				var curAttr = $(".locEducation[idValue={$smarty.post.education}]").attr('class');
+				$(".locEducation[idValue={$smarty.post.education}]").attr('class', curAttr + ' locSelected');
+				/*{/if}*/
+				//外表相关
+				/*{if isset($smarty.post.appearance)}*/
+				var curAttr = $(".locAppearance[idValue={$smarty.post.appearance}]").attr('class');
+				$(".locAppearance[idValue={$smarty.post.appearance}]").attr('class', curAttr + ' locSelected');
+				/*{/if}*/
+				//语言表达相关
+				/*{if isset($smarty.post.expression)}*/
+				var curAttr = $(".locExpression[idValue={$smarty.post.expression}]").attr('class');
+				$(".locExpression[idValue={$smarty.post.expression}]").attr('class', curAttr + ' locSelected');
 				/*{/if}*/
 				//点击城市
 				$(".locCity").click(function() {
@@ -50,7 +107,7 @@
 								//设置搜索条件
 								$("#businessArea").val(businessAreaId);
 								//清除选中格式
-								$(".locBusinessArea").attr('class', 'locItem locBusinessArea');
+								$(".locBusinessArea").attr('class', 'link2 locBusinessArea');
 								//设置选中格式
 								var curAttr = $(".locBusinessArea[idValue=" + businessAreaId + "]").attr('class');
 								$(".locBusinessArea[idValue=" + businessAreaId + "]").attr('class', curAttr + ' locSelected');
@@ -60,7 +117,7 @@
 						$("#locBusinessArea").html('');
 					}
 					//清除选中格式
-					$(".locCity").attr('class', 'locItem locCity');
+					$(".locCity").attr('class', 'link2 locCity');
 					//设置选中格式
 					var curAttr = $(".locCity[idValue=" + cityId + "]").attr('class');
 					$(".locCity[idValue=" + cityId + "]").attr('class', curAttr + ' locSelected');
@@ -71,10 +128,98 @@
 					//设置搜索条件
 					$("#businessArea").val(businessAreaId);
 					//清除选中格式
-					$(".locBusinessArea").attr('class', 'locItem locBusinessArea');
+					$(".locBusinessArea").attr('class', 'link2 locBusinessArea');
 					//设置选中格式
 					var curAttr = $(".locBusinessArea[idValue=" + businessAreaId + "]").attr('class');
 					$(".locBusinessArea[idValue=" + businessAreaId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//点击性别
+				$(".locSex").click(function() {
+					var sexId = $(this).attr('idValue');
+					//设置搜索条件
+					$("#sex").val(sexId);
+					//清除选中格式
+					$(".locSex").attr('class', 'link2 locSex');
+					//设置选中格式
+					var curAttr = $(".locSex[idValue=" + sexId + "]").attr('class');
+					$(".locSex[idValue=" + sexId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//点击身高
+				$(".locHeight").click(function() {
+					var heightId = $(this).attr('idValue');
+					var heightFrom = $(this).attr('idValueFrom');
+					var heightTo = $(this).attr('idValueTo');
+					//设置搜索条件
+					$("#height").val(heightId);
+					$("#heightFrom").val(heightFrom);
+					$("#heightTo").val(heightTo);
+					//清除选中格式
+					$(".locHeight").attr('class', 'link2 locHeight');
+					//设置选中格式
+					var curAttr = $(".locHeight[idValue=" + heightId + "]").attr('class');
+					$(".locHeight[idValue=" + heightId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//点击学历
+				$(".locEducation").click(function() {
+					var educationId = $(this).attr('idValue');
+					//设置搜索条件
+					$("#education").val(educationId);
+					//清除选中格式
+					$(".locEducation").attr('class', 'link2 locEducation');
+					//设置选中格式
+					var curAttr = $(".locEducation[idValue=" + educationId + "]").attr('class');
+					$(".locEducation[idValue=" + educationId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//点击外表相关
+				$(".locAppearance").click(function() {
+					var appearanceId = $(this).attr('idValue');
+					//设置搜索条件
+					$("#appearance").val(appearanceId);
+					//清除选中格式
+					$(".locAppearance").attr('class', 'link2 locAppearance');
+					//设置选中格式
+					var curAttr = $(".locAppearance[idValue=" + appearanceId + "]").attr('class');
+					$(".locAppearance[idValue=" + appearanceId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//点击语言表达相关
+				$(".locExpression").click(function() {
+					var expressionId = $(this).attr('idValue');
+					//设置搜索条件
+					$("#expression").val(expressionId);
+					//清除选中格式
+					$(".locExpression").attr('class', 'link2 locExpression');
+					//设置选中格式
+					var curAttr = $(".locExpression[idValue=" + expressionId + "]").attr('class');
+					$(".locExpression[idValue=" + expressionId + "]").attr('class', curAttr + ' locSelected');
+				});
+				//处理分页连接点击事件
+				$(".locPage > a").click(function(e) {
+					e.preventDefault();
+					var url = $(this).attr('href');
+					$("#locForm").attr('action', url);
+					$("#locForm").submit();
+				});
+				//处理活动详情div
+				$(".locExtend").click(function() {
+					var object = $(this);
+					if(object.attr('openStatus') == 'open') {
+						$(".locDraw").html('');
+						$(".locDraw").hide();
+						object.html('>');
+						object.attr('openStatus', 'close');
+					} else if(object.attr('openStatus') == 'close') {
+						$(".locExtend").html('>');
+						$(".locExtend").attr('openStatus', 'close');
+						$(".locDraw").html('');
+						$(".locDraw").hide();
+						$(".locDraw").load("{cw_ci_site_url param1='enterpriseSearchF_job/getTalentDetailContent'}/" + object.attr('talentId'), function(responseText, textStatus, XMLHttpRequest) {
+							if(textStatus == 'success') {
+								$(".locDraw").show();
+								object.html('<<');
+								object.attr('openStatus', 'open');
+							}
+						});
+					}
 				});
 			});
 		</script>
@@ -92,15 +237,21 @@
 					<a href="{cw_ci_site_url param1='login/logout'}">退出</a>
 				</div>
 			</div>
-			<form action="{cw_ci_site_url param1='enterpriseSearchF_job/search'}" method="post">
+			<form id="locForm" action="{cw_ci_site_url param1='enterpriseSearchF_job/search'}" method="post">
 				<div class="prepend-1 span-10">
 					<input id="jobId" name="jobId" type="hidden" value="{$jobId}"/>
-					<input id="keyWord" name="keyWord" type="text" value="{$smarty.post.keyWord|default:''}" />
+					<div class="relative">
+						<input id="keyWord" name="keyWord" class="locDefaultStrContainer input1" type="text" value="{$smarty.post.keyWord|default:''}" />
+						<div class="locDefaultStr defaultStr1 locUserNameDefaultStr">
+							请输入搜索内容
+						</div>
+					</div>
 					<input id="city" name="city" type="hidden" value="{$smarty.post.city|default:''}" />
 					<input id="businessArea" name="businessArea" type="hidden" value="{$smarty.post.businessArea|default:''}" />
 					<input id="sex" name="sex" type="hidden" value="{$smarty.post.sex|default:''}" />
 					<input id="ageFrom" name="ageFrom" type="hidden" value="{$smarty.post.ageFrom|default:''}" />
 					<input id="ageTo" name="ageTo" type="hidden" value="{$smarty.post.ageTo|default:''}" />
+					<input id="height" name="height" type="hidden" value="{$smarty.post.height|default:''}" />
 					<input id="heightFrom" name="heightFrom" type="hidden" value="{$smarty.post.heightFrom|default:''}" />
 					<input id="heightTo" name="heightTo" type="hidden" value="{$smarty.post.heightTo|default:''}" />
 					<input id="education" name="education" type="hidden" value="{$smarty.post.education|default:''}" />
@@ -112,7 +263,7 @@
 				</div>
 			</form>
 			<div class="span-10">
-				<a href="#">返回首页</a>
+				<a href="{cw_ci_site_url param1='enterpriseMain'}">返回首页</a>
 			</div>
 			<div class="clear prepend-1 span-62 prepend-top">
 				<div class="span-62">
@@ -120,9 +271,9 @@
 						<span class="label1">城市</span>
 					</div>
 					<div class="span-54">
-						<a href="#" class="locItem locCity" idValue="">不限</a>
+						<a href="#" class="link2 locCity" idValue="">不限</a>
 						<!--{foreach $cityList as $city}-->
-						<a href="#" class="locItem locCity" idValue="{$city['id']}">{$city['name']}</a>
+						<a href="#" class="link2 locCity" idValue="{$city['id']}">{$city['name']}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
@@ -132,9 +283,9 @@
 					</div>
 					<div id="locBusinessArea" class="span-54">
 						<!--{if isset($businessAreaList)}-->
-						<a href="#" class="locItem locBusinessArea" idValue="">不限</a>
+						<a href="#" class="link2 locBusinessArea" idValue="">不限</a>
 						<!--{foreach $businessAreaList as $businessArea}-->
-						<a href="#" class="locItem locBusinessArea" idValue="{$businessArea['id']}">{$businessArea['name']}</a>
+						<a href="#" class="link2 locBusinessArea" idValue="{$businessArea['id']}">{$businessArea['name']}</a>
 						<!--{/foreach}-->
 						<!--{/if}-->
 					</div>
@@ -144,9 +295,9 @@
 						<span class="label1">性别</span>
 					</div>
 					<div class="span-54">
-						<span class="locItem locSex" idValue="">不限</span>
+						<a href="#" class="link2 locSex" idValue="">不限</a>
 						<!--{foreach $sexList as $sex}-->
-						<span class="locItem locSex" idValue="{$sex['id']}">{$sex['name']}</span>
+						<a href="#" class="link2 locSex" idValue="{$sex['id']}">{$sex['name']}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
@@ -155,9 +306,9 @@
 						<span class="label1">身高</span>
 					</div>
 					<div class="span-54">
-						<span class="locItem locHeight" idValue="">不限</span>
+						<a href="#" class="link2 locHeight" idValue="" idValueFrom="" idValueTo="">不限</a>
 						<!--{foreach $heightList as $key=>$value}-->
-						<span class="locItem locHeight" idValue="{$key}">{$value}</span>
+						<a href="#" class="link2 locHeight" idValue="{$key}" idValueFrom="{$value[1]}" idValueTo="{$value[2]}">{$value[0]}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
@@ -166,9 +317,9 @@
 						<span class="label1">学历</span>
 					</div>
 					<div class="span-54">
-						<span class="locItem locEducation" idValue="">不限</span>
+						<a href="#" class="link2 locEducation" idValue="">不限</a>
 						<!--{foreach $educationList as $education}-->
-						<span class="locItem locEducation" idValue="{$education['id']}">{$education['name']}</span>
+						<a href="#" class="link2 locEducation" idValue="{$education['id']}">{$education['name']}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
@@ -177,9 +328,9 @@
 						<span class="label1">外表相关</span>
 					</div>
 					<div class="span-54">
-						<span class="locItem locAppearance" idValue="">不限</span>
+						<a href="#" class="link2 locAppearance" idValue="">不限</a>
 						<!--{foreach $appearanceList as $appearance}-->
-						<span class="locItem locAppearance" idValue="{$appearance['id']}">{$appearance['name']}</span>
+						<a href="#" class="link2 locAppearance" idValue="{$appearance['id']}">{$appearance['name']}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
@@ -188,20 +339,69 @@
 						<span class="label1">语言表达相关</span>
 					</div>
 					<div class="span-54">
-						<span class="locItem locExpression" idValue="">不限</span>
+						<a href="#" class="link2 locExpression" idValue="">不限</a>
 						<!--{foreach $expressionList as $expression}-->
-						<span class="locItem locExpression" idValue="{$expression['id']}">{$expression['name']}</span>
+						<a href="#" class="link2 locExpression" idValue="{$expression['id']}">{$expression['name']}</a>
 						<!--{/foreach}-->
 					</div>
 				</div>
 				<div class="span-62">
-					<div class="span-31">
+					<div class="span-32">
+						<div class="locDrawContainer">
+							<div class="locDraw"></div>
+						</div>
 						<!--{foreach $talentList as $talent}-->
-						<!--{foreach $talent as $item}-->
-						<span>{$item}</span>
+						<div class="span-31">
+							<div class="span-31">
+								<div class="span-5 head3">
+									{$talent['talentPersonName']}
+								</div>
+								<div class="span-3 label1">
+									备注:
+								</div>
+								<div class="span-5 text1">
+									{$talent['hunterNote']|truncate:6}
+								</div>
+								<div class="span-3 label1">
+									城市:
+								</div>
+								<div class="span-5 text1">
+									{$talent['cityList']|truncate:8}
+								</div>
+								<div class="span-3 label1">
+									商区:
+								</div>
+								<div class="span-5 text1">
+									{$talent['businessAreaList']|truncate:8}
+								</div>
+							</div>
+							<div class="span-31">
+								<div class="span-5 label1">
+									推荐人:
+								</div>
+								<div class="span-8 text1">
+									{$talent['hunterAccountName']|truncate:15}
+								</div>
+								<div class="span-3 label1">
+									性别:
+								</div>
+								<div class="span-5 text1">
+									{$talent['sex']}
+								</div>
+								<div class="span-3 label1">
+									学历:
+								</div>
+								<div class="span-5 text1">
+									{$talent['education']}
+								</div>
+							</div>
+						</div>
+						<div class="span-1">
+							<a href="#" class="locExtend" talentId="{$talent['id']}" openStatus="close">&gt;</a>
+						</div>
+						<hr />
 						<!--{/foreach}-->
-						<hr>
-						<!--{/foreach}-->
+						{cw_ci_create_links}
 					</div>
 				</div>
 			</div>
