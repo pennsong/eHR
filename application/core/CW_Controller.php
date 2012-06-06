@@ -8,6 +8,7 @@ class CW_Controller extends CI_Controller
 	private $commonHead = '';
 	private $jqueryHead = '';
 	private $validationEngineHead = '';
+	private $flowplayerHead = '';
 	public function __construct()
 	{
 		parent::__construct();
@@ -28,6 +29,9 @@ class CW_Controller extends CI_Controller
 		$this->validationEngineHead .= '<script src="'.base_url().'resource/js/jquery.validationEngine.js" type="text/javascript"></script>'."\n";
 		$this->validationEngineHead .= '<script src="'.base_url().'resource/js/jquery.validationEngine-zh_CN.js" type="text/javascript"></script>'."\n";
 		$this->smarty->assign('validationEngineHead', $this->validationEngineHead);
+		$this->flowplayerHead .= '<!-- flowplayer -->'."\n";
+		$this->flowplayerHead .= '<script src="'.base_url().'resource/flowplayer/flowplayer-3.2.6.min.js" type="text/javascript"></script>'."\n";
+		$this->smarty->assign('flowplayerHead', $this->flowplayerHead);
 		if (!CW_Controller::_checkLogin())
 		{
 			redirect(base_url()."index.php/login");

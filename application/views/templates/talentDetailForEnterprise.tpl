@@ -1,3 +1,15 @@
+<!--{$jqueryHead}-->
+<!--{$flowplayerHead}-->
+<script>
+	$(document).ready(function() {
+		flowplayer("locPlayer", "{cw_ci_base_url}resource/flowplayer/flowplayer-3.2.7.swf", {
+			clip : {
+				autoPlay : false,
+				autoBuffering : true
+			}
+		});
+	}); 
+</script>
 <div class="span-28">
 	<div class="span-5">
 		{$talentInfo['talentPersonName']}
@@ -24,6 +36,115 @@
 			<div class="span-13">
 				<span class="text1">{$hunterPoint}</span>
 			</div>
+		</div>
+	</div>
+</div>
+<div class="span-28">
+	<div class="span-5">
+		照片
+	</div>
+	<div class="span-23">
+		<img height="240" width="320" src="{if $talentInfo['photoURL'] == NULL}{cw_ci_base_url}resource/img/defaultPhoto.png{else}{$talentInfo['photoURL']}{/if}" />
+	</div>
+	<div class="span-5">
+		视频
+	</div>
+	<div class="span-23">
+		<!--{if $talentInfo['videoURL'] == NULL}-->
+		<img height="240" width="320" src="{cw_ci_base_url}resource/img/defaultPhoto.png" />
+		<!--{else}-->
+		<a
+		href="{$talentInfo['videoURL']}"
+		style="display:block;width:320px;height:240px"
+		id="locPlayer"> </a>
+		<!-- this will install flowplayer inside previous A- tag. -->
+		<!--{/if}-->
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			城市
+		</div>
+		<div class="span-16">
+			{$talentInfo['cityList']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			商区
+		</div>
+		<div class="span-16">
+			{$talentInfo['businessAreaList']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			性别
+		</div>
+		<div class="span-16">
+			{$talentInfo['sex']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			婚否
+		</div>
+		<div class="span-16">
+			{$talentInfo['marriage']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			身高
+		</div>
+		<div class="span-16">
+			{$talentInfo['height']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			学历
+		</div>
+		<div class="span-16">
+			{$talentInfo['education']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			外表相关
+		</div>
+		<div class="span-16">
+			{$talentInfo['appearance']}
+		</div>
+	</div>
+	<div class="prepend-5 span-23">
+		<div class="span-7 label1">
+			语言表达相关
+		</div>
+		<div class="span-16">
+			{$talentInfo['expression']}
+		</div>
+	</div>
+	<div class="span-5">
+		备注
+	</div>
+	<div class="span-23">
+		<textarea class="locHunterNote" style="width:315px; height:100px">{$talentInfo['hunterNote']}</textarea>
+	</div>
+	<div class="span-28">
+		<div class="prepend-6 span-4">
+			<button id="locInterview">
+				面试
+			</button>
+		</div>
+		<div class="prepend-2 span-4">
+			<button>
+				待定
+			</button>
+		</div>
+		<div class="prepend-2 span-4">
+			<button>
+				拒绝
+			</button>
 		</div>
 	</div>
 </div>

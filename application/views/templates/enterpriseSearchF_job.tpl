@@ -3,6 +3,7 @@
 	<head>
 		<!--{$commonHead}-->
 		<!--{$jqueryHead}-->
+		<!--{$flowplayerHead}-->
 		<title>公司职位挑选人才</title>
 		<style type="text/css" media="screen">
 			.locSelected {
@@ -17,7 +18,7 @@
 				left: 490px;
 				top: 0px;
 				width: 420px;
-				height: 500px;
+				height: 1000px;
 				z-index: 1000;
 				padding-left: 10px;
 				padding-right: 10px;
@@ -195,7 +196,7 @@
 				//处理分页连接点击事件
 				$(".locPage > a").click(function(e) {
 					e.preventDefault();
-					var url = $("#locForm").attr('action')+$(this).attr('href');
+					var url = $("#locForm").attr('action') + $(this).attr('href');
 					$("#locForm").attr('action', url);
 					$("#locForm").submit();
 				});

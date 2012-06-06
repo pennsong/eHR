@@ -249,17 +249,32 @@ class EnterpriseSearchF_job extends CW_Controller
 		$talentInfo = $query->first_row('array');
 		$query->free_all();
 		//获得对应猎头成功推荐人数
-		$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($talentInfo['hunter']));
-		$hunterSuccessNum = $query->first_row()->num;
-		$query->free_all();
+		//$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($talentInfo['hunter']));
+		//$hunterSuccessNum = $query->first_row()->num;
+		//$query->free_all();
 		//获得对应猎头积分
-		$query = $this->db->query('CALL getPointF_hunter(?)', array($talentInfo['hunter']));
-		$hunterPoint = $query->first_row()->point;
+		//$query = $this->db->query('CALL getPointF_hunter(?)', array($talentInfo['hunter']));
+		//$hunterPoint = $query->first_row()->point;
+		//$query->free_all();
+		//取得人才适合城市信息
+		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
+		$talentInfo['cityList'] = '';
+		foreach ($query->result_array() as $city)
+		{
+			$talentInfo['cityList'] .= $city['cityName'].",";
+		}
+		$query->free_all();
+		//取得人才适合商区信息
+		$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent['id']));
+		$talentInfo['businessAreaList'] = '';
+		foreach ($query->result_array() as $city)
+		{
+			$talentInfo['businessAreaList'] .= $city['businessAreaName'];
+		}
 		$query->free_all();
 		$this->smarty->assign('talentInfo', $talentInfo);
-		$this->smarty->assign('hunterSuccessNum', $hunterSuccessNum);
-		$this->smarty->assign('hunterPoint', $hunterPoint);
-		$this->smarty->assign('talent', $talent);
+		$this->smarty->assign('hunterSuccessNum', '未知');
+		$this->smarty->assign('hunterPoint', '未知');
 		$this->smarty->display('talentDetailForEnterprise.tpl');
 	}
 
