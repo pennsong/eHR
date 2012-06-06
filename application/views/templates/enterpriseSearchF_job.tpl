@@ -195,7 +195,7 @@
 				//处理分页连接点击事件
 				$(".locPage > a").click(function(e) {
 					e.preventDefault();
-					var url = $(this).attr('href');
+					var url = $("#locForm").attr('action')+$(this).attr('href');
 					$("#locForm").attr('action', url);
 					$("#locForm").submit();
 				});

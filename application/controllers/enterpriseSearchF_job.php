@@ -65,6 +65,10 @@ class EnterpriseSearchF_job extends CW_Controller
 
 	public function index($jobId, $offset = 0, $limit = 10)
 	{
+		if (!ctype_digit($jobId))
+		{
+			show_error('不合法参数', $status_code = 404);
+		}
 		$this->initPage($jobId);
 		//处理分页
 		$this->load->library('pagination');
@@ -120,6 +124,10 @@ class EnterpriseSearchF_job extends CW_Controller
 	{
 		$this->load->helper('string_helper');
 		$jobId = emptyToNull($this->input->post('jobId'));
+		if (!ctype_digit($jobId))
+		{
+			show_error('不合法参数', $status_code = 404);
+		}
 		$this->initPage($jobId);
 		$hunter = emptyToNull($this->input->post('hunter'));
 		$keyWord = emptyToNull($this->input->post('keyWord'));
@@ -149,7 +157,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->load->library('pagination');
 		$config['full_tag_open'] = '<div class="locPage">';
 		$config['full_tag_close'] = '</div>';
-		$config['base_url'] = site_url('enterpriseSearchF_job/search/');
+		$config['base_url'] = '';
 		$config['uri_segment'] = 3;
 		//取得符合条件人才信息条数
 		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
@@ -236,7 +244,23 @@ class EnterpriseSearchF_job extends CW_Controller
 
 	public function getTalentDetailContent($talent)
 	{
-		echo "talentId:".$talent;
+		//取得人才信息
+		$query = $this->db->query('CALL getInfoF_talent(?)', array($talent));
+		$talentInfo = $query->first_row('array');
+		$query->free_all();
+		//获得对应猎头成功推荐人数
+		$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($talentInfo['hunter']));
+		$hunterSuccessNum = $query->first_row()->num;
+		$query->free_all();
+		//获得对应猎头积分
+		$query = $this->db->query('CALL getPointF_hunter(?)', array($talentInfo['hunter']));
+		$hunterPoint = $query->first_row()->point;
+		$query->free_all();
+		$this->smarty->assign('talentInfo', $talentInfo);
+		$this->smarty->assign('hunterSuccessNum', $hunterSuccessNum);
+		$this->smarty->assign('hunterPoint', $hunterPoint);
+		$this->smarty->assign('talent', $talent);
+		$this->smarty->display('talentDetailForEnterprise.tpl');
 	}
 
 }
