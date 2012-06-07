@@ -2,6 +2,17 @@
 <!--{$flowplayerHead}-->
 <script>
 	$(document).ready(function() {
+		//获得对应猎头成功推荐人数
+		$("#locSuccessNum").load("{cw_ci_site_url param1='enterpriseSearchF_job/getHunterSuccessNum'}/{$talentInfo['hunter']}", function(responseText, textStatus, XMLHttpRequest) {
+			if(textStatus == 'success') {
+			}
+		});
+		//获得对应猎头积分
+		$("#locPoint").load("{cw_ci_site_url param1='enterpriseSearchF_job/getHunterPoint'}/{$talentInfo['hunter']}", function(responseText, textStatus, XMLHttpRequest) {
+			if(textStatus == 'success') {
+			}
+		});
+		//设置视频
 		flowplayer("locPlayer", "{cw_ci_base_url}resource/flowplayer/flowplayer-3.2.7.swf", {
 			clip : {
 				autoPlay : false,
@@ -25,16 +36,16 @@
 			<div class="span-5">
 				<span class="label1">已推荐:</span>
 			</div>
-			<div class="span-13">
-				<span class="text1">{$hunterSuccessNum}人</span>
+			<div id="locSuccessNum" class="span-13">
+				<img src="{cw_ci_base_url}/resource/img/loader.gif" />
 			</div>
 		</div>
 		<div class="span-18">
 			<div class="span-5">
 				<span class="label1">综合评分:</span>
 			</div>
-			<div class="span-13">
-				<span class="text1">{$hunterPoint}</span>
+			<div id="locPoint" class="span-13">
+				<img src="{cw_ci_base_url}/resource/img/loader.gif" />
 			</div>
 		</div>
 	</div>

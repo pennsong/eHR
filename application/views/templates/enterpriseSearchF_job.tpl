@@ -14,7 +14,7 @@
 			}
 			.locDraw {
 				position: absolute;
-				background-color: #FF0000;
+				background-color: #FFFFFF;
 				left: 490px;
 				top: 0px;
 				width: 420px;
@@ -27,6 +27,10 @@
 			}
 			.locExtend {
 				text-decoration: none;
+			}
+			#locTalentContainer
+			{
+				height: 850px;
 			}
 		</style>
 		<script>
@@ -346,7 +350,7 @@
 						<!--{/foreach}-->
 					</div>
 				</div>
-				<div class="span-62">
+				<div id="locTalentContainer" class="span-62">
 					<div class="span-32">
 						<div class="locDrawContainer">
 							<div class="locDraw"></div>

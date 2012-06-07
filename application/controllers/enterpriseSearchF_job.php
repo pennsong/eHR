@@ -248,14 +248,6 @@ class EnterpriseSearchF_job extends CW_Controller
 		$query = $this->db->query('CALL getInfoF_talent(?)', array($talent));
 		$talentInfo = $query->first_row('array');
 		$query->free_all();
-		//获得对应猎头成功推荐人数
-		//$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($talentInfo['hunter']));
-		//$hunterSuccessNum = $query->first_row()->num;
-		//$query->free_all();
-		//获得对应猎头积分
-		//$query = $this->db->query('CALL getPointF_hunter(?)', array($talentInfo['hunter']));
-		//$hunterPoint = $query->first_row()->point;
-		//$query->free_all();
 		//取得人才适合城市信息
 		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
 		$talentInfo['cityList'] = '';
@@ -273,9 +265,24 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 		$query->free_all();
 		$this->smarty->assign('talentInfo', $talentInfo);
-		$this->smarty->assign('hunterSuccessNum', '未知');
-		$this->smarty->assign('hunterPoint', '未知');
 		$this->smarty->display('talentDetailForEnterprise.tpl');
+	}
+
+	public function getHunterSuccessNum($hunter)
+	{
+		//获得对应猎头成功推荐人数
+		$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($hunter));
+		$hunterSuccessNum = $query->first_row()->num;
+		$query->free_all();
+		echo '<span class="text1">'.$hunterSuccessNum.'人</span>';
+	}
+
+	public function getHunterPoint($hunter)
+	{
+		//获得对应猎头积分
+		$query = $this->db->query('CALL getPointF_hunter(?)', array($hunter));
+		$hunterPoint = $query->first_row()->point;
+		echo '<span class="text1">'.$hunterPoint.'人</span>';
 	}
 
 }
