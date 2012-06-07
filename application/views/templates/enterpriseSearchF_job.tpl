@@ -217,7 +217,7 @@
 						$(".locExtend").attr('openStatus', 'close');
 						$(".locDraw").html('');
 						$(".locDraw").hide();
-						$(".locDraw").load("{cw_ci_site_url param1='enterpriseSearchF_job/getTalentDetailContent'}/" + object.attr('talentId'), function(responseText, textStatus, XMLHttpRequest) {
+						$(".locDraw").load("{cw_ci_site_url param1='enterpriseSearchF_job/getTalentDetailContent'}/" + object.attr('talentId') + "/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
 							if(textStatus == 'success') {
 								$(".locDraw").show();
 								object.html('<<');

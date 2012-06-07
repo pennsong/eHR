@@ -117,6 +117,7 @@ class EnterpriseSearchF_job extends CW_Controller
 			$query->free_all();
 		}
 		$this->smarty->assign('talentList', $talentList);
+		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->display('enterpriseSearchF_job.tpl');
 	}
 
@@ -242,7 +243,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->display('businessAreaList.tpl');
 	}
 
-	public function getTalentDetailContent($talent)
+	public function getTalentDetailContent($talent, $jobId)
 	{
 		//取得人才信息
 		$query = $this->db->query('CALL getInfoF_talent(?)', array($talent));
@@ -265,6 +266,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 		$query->free_all();
 		$this->smarty->assign('talentInfo', $talentInfo);
+		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->display('talentDetailForEnterprise.tpl');
 	}
 
@@ -283,6 +285,29 @@ class EnterpriseSearchF_job extends CW_Controller
 		$query = $this->db->query('CALL getPointF_hunter(?)', array($hunter));
 		$hunterPoint = $query->first_row()->point;
 		echo '<span class="text1">'.$hunterPoint.'人</span>';
+	}
+
+	public function getDealStatus($job, $talent)
+	{
+		//取得交易id
+		$query = $this->db->query('SELECT id FROM deal WHERE active = 1 AND job = ? AND talent = ?', array(
+			$job,
+			$talent
+		));
+		if ($query->num_rows() > 0)
+		{
+			$deal = $query->first_row()->id;
+			//获得交易当前状态
+			$query = $this->db->query('CALL getStatusF_deal(?)', array($deal));
+			$status = $query->first_row()->status;
+			$query->free_all();
+			echo $status;
+		}
+		else
+		{
+			//无交易
+			echo '0';
+		}
 	}
 
 }

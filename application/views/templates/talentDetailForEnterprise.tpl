@@ -12,6 +12,11 @@
 			if(textStatus == 'success') {
 			}
 		});
+		//获得交易状态
+		$("#locStatus").load("{cw_ci_site_url param1='enterpriseSearchF_job/getDealStatus'}/{$jobId}/{$talentInfo['id']}/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
+			if(textStatus == 'success') {
+			}
+		});
 		//设置视频
 		flowplayer("locPlayer", "{cw_ci_base_url}resource/flowplayer/flowplayer-3.2.7.swf", {
 			clip : {
@@ -142,7 +147,8 @@
 		<textarea class="locHunterNote" style="width:315px; height:100px">{$talentInfo['hunterNote']}</textarea>
 	</div>
 	<div class="span-28">
-		<div class="prepend-6 span-4">
+		<div id="locStatus" class="span-6"></div>
+		<div class="span-4">
 			<button id="locInterview">
 				面试
 			</button>
