@@ -12,8 +12,8 @@
 			if(textStatus == 'success') {
 			}
 		});
-		//获得交易状态
-		$("#locStatus").load("{cw_ci_site_url param1='enterpriseSearchF_job/getDealStatus'}/{$jobId}/{$talentInfo['id']}/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
+		//设置按钮
+		$("#locButtonLayout").load("{cw_ci_site_url param1='enterpriseSearchF_job/getButtonLayout'}/{$jobId}/{$talentInfo['id']}", function(responseText, textStatus, XMLHttpRequest) {
 			if(textStatus == 'success') {
 			}
 		});
@@ -35,6 +35,7 @@
 	</div>
 	<div class="span-18">
 		<div class="span-18">
+			<input id="talent" type="hidden" value="{$talentInfo['id']}" />
 			<span class="text1">{$talentInfo['talentPersonName']}</span>
 		</div>
 		<div class="span-18">
@@ -146,22 +147,5 @@
 	<div class="span-23">
 		<textarea class="locHunterNote" style="width:315px; height:100px">{$talentInfo['hunterNote']}</textarea>
 	</div>
-	<div class="span-28">
-		<div id="locStatus" class="span-6"></div>
-		<div class="span-4">
-			<button id="locInterview">
-				面试
-			</button>
-		</div>
-		<div class="prepend-2 span-4">
-			<button>
-				待定
-			</button>
-		</div>
-		<div class="prepend-2 span-4">
-			<button>
-				拒绝
-			</button>
-		</div>
-	</div>
+	<div id="locButtonLayout" class="span-28"></div>
 </div>

@@ -287,7 +287,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		echo '<span class="text1">'.$hunterPoint.'人</span>';
 	}
 
-	public function getDealStatus($job, $talent)
+	public function getButtonLayout($job, $talent)
 	{
 		//取得交易id
 		$query = $this->db->query('SELECT id FROM deal WHERE active = 1 AND job = ? AND talent = ?', array(
@@ -297,16 +297,104 @@ class EnterpriseSearchF_job extends CW_Controller
 		if ($query->num_rows() > 0)
 		{
 			$deal = $query->first_row()->id;
+			$this->smarty->assign('deal', $deal);
 			//获得交易当前状态
 			$query = $this->db->query('CALL getStatusF_deal(?)', array($deal));
-			$status = $query->first_row()->status;
+			if ($query->num_rows() > 0)
+			{
+				$status = $query->first_row()->status;
+			}
+			else
+			{
+				$status = 0;
+			}
 			$query->free_all();
-			echo $status;
 		}
 		else
 		{
 			//无交易
-			echo '0';
+			$status = 0;
+		}
+		//设置面试按钮状态
+		$interviewDisabled = TRUE;
+		if (in_array($status, array(
+			0,
+			1,
+			3
+		), true))
+		{
+			$interviewDisabled = FALSE;
+		}
+		//设置待定按钮状态
+		$todoDisabled = TRUE;
+		if (in_array($status, array(0), true))
+		{
+			$todoDisabled = FALSE;
+		}
+		//设置拒绝按钮状态
+		$rejectDisabled = TRUE;
+		if (in_array($status, array(3), true))
+		{
+			$rejectDisabled = FALSE;
+		}
+		$this->smarty->assign('interviewDisabled', $interviewDisabled);
+		$this->smarty->assign('todoDisabled', $todoDisabled);
+		$this->smarty->assign('rejectDisabled', $rejectDisabled);
+		$this->smarty->display('enterpriseSearchF_job_getButtonLayout.tpl');
+	}
+
+	public function createDeal($talent, $job, $status)
+	{
+		$enterPriseUser = $this->session->userdata('userId');
+		$this->db->trans_begin();
+		//新建交易
+		$query = $this->db->query('SELECT createDeal(?, ?, ?, ?) vResult', array(
+			$talent,
+			$job,
+			$enterPriseUser,
+			$status
+		));
+		$result = $query->first_row()->vResult;
+		$query->free_all();
+		if ($result == 1)
+		{
+			//新建成功
+			$this->db->trans_commit();
+			echo 'ok';
+		}
+		else
+		{
+			//新建失败
+			$this->db->trans_rollback();
+			echo 'failed';
+		}
+	}
+
+	public function createStatusF_deal($deal, $status, $note)
+	{
+		$role = "enterpriseUser";
+		$enterPriseUser = $this->session->userdata('userId');
+		//新建交易状态
+		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
+			$deal,
+			$status,
+			NULL,
+			'enterpriseUser',
+			$enterPriseUser
+		));
+		$result = $query->first_row()->vResult;
+		$query->free_all();
+		if ($result == 1)
+		{
+			//新建成功
+			$this->db->trans_commit();
+			echo 'ok';
+		}
+		else
+		{
+			//新建失败
+			$this->db->trans_rollback();
+			echo 'failed';
 		}
 	}
 

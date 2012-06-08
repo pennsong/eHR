@@ -28,8 +28,7 @@
 			.locExtend {
 				text-decoration: none;
 			}
-			#locTalentContainer
-			{
+			#locTalentContainer {
 				height: 850px;
 			}
 		</style>
