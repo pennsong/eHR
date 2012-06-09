@@ -306,34 +306,37 @@ class EnterpriseSearchF_job extends CW_Controller
 			}
 			else
 			{
-				$status = 0;
+				$status = '0';
 			}
 			$query->free_all();
 		}
 		else
 		{
 			//无交易
-			$status = 0;
+			$status = '0';
 		}
 		//设置面试按钮状态
 		$interviewDisabled = TRUE;
 		if (in_array($status, array(
-			0,
-			1,
-			3
+			'0',
+			'1',
+			'3'
 		), true))
 		{
 			$interviewDisabled = FALSE;
 		}
 		//设置待定按钮状态
 		$todoDisabled = TRUE;
-		if (in_array($status, array(0), true))
+		if (in_array($status, array('0'), true))
 		{
 			$todoDisabled = FALSE;
 		}
 		//设置拒绝按钮状态
 		$rejectDisabled = TRUE;
-		if (in_array($status, array(3), true))
+		if (in_array($status, array(
+			'2',
+			'3'
+		), true))
 		{
 			$rejectDisabled = FALSE;
 		}
@@ -343,16 +346,17 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->display('enterpriseSearchF_job_getButtonLayout.tpl');
 	}
 
-	public function createDeal($talent, $job, $status)
+	public function createDeal($talent, $job, $status, $note = '')
 	{
 		$enterPriseUser = $this->session->userdata('userId');
 		$this->db->trans_begin();
 		//新建交易
-		$query = $this->db->query('SELECT createDeal(?, ?, ?, ?) vResult', array(
+		$query = $this->db->query('SELECT createDeal(?, ?, ?, ?, ?) vResult', array(
 			$talent,
 			$job,
 			$enterPriseUser,
-			$status
+			$status,
+			emptyToNull(urldecode($note))
 		));
 		$result = $query->first_row()->vResult;
 		$query->free_all();
@@ -370,7 +374,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 	}
 
-	public function createStatusF_deal($deal, $status, $note)
+	public function createStatusF_deal($deal, $status, $note = '')
 	{
 		$role = "enterpriseUser";
 		$enterPriseUser = $this->session->userdata('userId');
@@ -378,7 +382,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
 			$deal,
 			$status,
-			NULL,
+			emptyToNull(urldecode($note)),
 			'enterpriseUser',
 			$enterPriseUser
 		));
