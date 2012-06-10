@@ -37,11 +37,7 @@
 
 	function submitInterview(status) {
 		var url;
-		if($("#locDeal").val() == '') {
-			ajaxURL = "{cw_ci_site_url param1='enterpriseSearchF_job/createDeal'}/" + $("#talent").val() + '/' + $("#jobId").val() + '/' + status + "/" + encodeURIComponent(noteMsg(status));
-		} else {
-			ajaxURL = "{cw_ci_site_url param1='enterpriseSearchF_job/createStatusF_deal'}/" + $("#locDeal").val() + '/' + status + "/" + encodeURIComponent(noteMsg(status));
-		}
+		ajaxURL = "{cw_ci_site_url param1='enterpriseSearchF_job/createStatusF_deal'}/" + $("#talent").val() + '/' + $("#jobId").val() + "/" + status + "/" + encodeURIComponent(noteMsg(status));
 		$.ajax({
 			url : ajaxURL,
 			success : function(data, textStatus, jqXHR) {
@@ -67,13 +63,12 @@
 		}
 	}
 </script>
-<input id="locDeal" type="hidden" value="{$deal|default:''}"/>
 <div class="prepend-6 span-4">
 	<div style="position:relative">
 		<button id="locInterview" {if $interviewDisabled}disabled{/if}>
 			面试
 		</button>
-		<div id="interviewNote" class="span-20" style="position:absolute; top:25px; left:2px; background:red; display:none">
+		<div id="interviewNote" class="span-20" style="position:absolute; top:25px; left:2px; border:1px solid; padding:5px; border-color:gray; display:none">
 			<div span="span-20">
 				<div class="span-4">
 					时间1

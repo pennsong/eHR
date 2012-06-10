@@ -346,41 +346,14 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->display('enterpriseSearchF_job_getButtonLayout.tpl');
 	}
 
-	public function createDeal($talent, $job, $status, $note = '')
-	{
-		$enterPriseUser = $this->session->userdata('userId');
-		$this->db->trans_begin();
-		//新建交易
-		$query = $this->db->query('SELECT createDeal(?, ?, ?, ?, ?) vResult', array(
-			$talent,
-			$job,
-			$enterPriseUser,
-			$status,
-			emptyToNull(urldecode($note))
-		));
-		$result = $query->first_row()->vResult;
-		$query->free_all();
-		if ($result == 1)
-		{
-			//新建成功
-			$this->db->trans_commit();
-			echo 'ok';
-		}
-		else
-		{
-			//新建失败
-			$this->db->trans_rollback();
-			echo 'failed';
-		}
-	}
-
-	public function createStatusF_deal($deal, $status, $note = '')
+	public function createStatusF_deal($talent, $job, $status, $note = '')
 	{
 		$role = "enterpriseUser";
 		$enterPriseUser = $this->session->userdata('userId');
 		//新建交易状态
-		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
-			$deal,
+		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?, ?) vResult', array(
+			$talent,
+			$job,
 			$status,
 			emptyToNull(urldecode($note)),
 			'enterpriseUser',

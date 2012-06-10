@@ -37,31 +37,31 @@
 						公司名称
 					</div>
 					<div class="span-24">
-						<input id="name" name="name" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$enterpriseInfo['name']}"/>
+						<input id="name" name="name" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$enterpriseInfo['name']}"/>
 					</div>
 					<div class="span-6 label1">
 						电话
 					</div>
 					<div class="span-24">
-						<input id="phone" name="phone" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$enterpriseInfo['phone']}"/>
+						<input id="phone" name="phone" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$enterpriseInfo['phone']}"/>
 					</div>
 					<div class="span-6 label1">
 						邮件
 					</div>
 					<div class="span-24">
-						<input id="mail" name="mail" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$enterpriseInfo['mail']}"/>
+						<input id="mail" name="mail" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$enterpriseInfo['mail']}"/>
 					</div>
 					<div class="span-6 label1">
 						地址
 					</div>
 					<div class="span-24">
-						<input id="address" name="address" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$enterpriseInfo['address']}"/>
+						<input id="address" name="address" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$enterpriseInfo['address']}"/>
 					</div>
 					<div class="span-6 label1">
 						简介
 					</div>
 					<div class="span-24">
-						<textarea id="introduction" name="introduction" cols="40" rows="5" class="validate[required, custom[onlyNumberLetterChinese]" data-prompt-position="centerLeft">{$enterpriseInfo['introduction']}</textarea>
+						<textarea id="introduction" name="introduction" cols="40" rows="5" class="validate[required, custom[onlyNumberLetterChinese]]" data-prompt-position="centerLeft">{$enterpriseInfo['introduction']}</textarea>
 					</div>
 					<div class="span-6">
 						<input type="submit" value="保存"/>
