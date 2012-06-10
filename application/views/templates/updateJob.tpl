@@ -16,6 +16,15 @@
 					promptPosition : "centerRight",
 					autoPositionUpdate : "true"
 				});
+				$("#addLanguage").click(function() {
+					var ajaxURL = "{cw_ci_site_url param1='jobInfo/addLanguage'}";
+					$.ajax({
+						url : ajaxURL,
+						success : function(data, textStatus, jqXHR) {
+							$("#languageSection").append(data);
+						}
+					});
+				});
 			});
 		</script>
 	</head>
@@ -156,6 +165,49 @@
 						<div class="span-9">
 							{html_options id=education name=education options=$educationList selected=$jobInfo['education']}
 						</div>
+					</div>
+					<div class="span-62 head3">
+						语言
+					</div>
+					<div id="languageSection">
+						<!--{foreach $jobLanguageList as $language=>$commonLevel}-->
+						<div class="span-62">
+							<div class="span-5">
+								{html_options id="language[]" name="language[]" options=$languageList selected=$language}
+							</div>
+							<div class="span-5 label1">
+								掌握能力
+							</div>
+							<div class="span-5">
+								{html_options id="languageLevel[]" name="languageLevel[]" options=$commonLevelList selected=$commonLevel}
+							</div>
+						</div>
+						<!--{/foreach}-->
+					</div>
+					<div class="span-62">
+						<input type="button" id="addLanguage" value="添加" />
+					</div>
+					<div class="span-62 head3">
+						特殊技能
+					</div>
+					<div class="span-62">
+						<textarea id="specialSkill" name="specialSkill" cols="40" rows="5" class="">{$jobInfo['specialSkill']}</textarea>
+					</div>
+					<div class="span-62 head3">
+						工作要求及描述
+					</div>
+					<div class="span-62">
+						<textarea id="detail" name="detail" cols="40" rows="5" class="">{$jobInfo['detail']}</textarea>
+					</div>
+					<div class="span-5">
+						<input type="submit" value="保存" />
+					</div>
+					<div class="span-5">
+						<input type="button" value="重置" />
+						<!--only need to reload page-->
+					</div>
+					<div class="span-5">
+						<input type="button" value="返回" />
 					</div>
 				</form>
 			</div>

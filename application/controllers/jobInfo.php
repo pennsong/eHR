@@ -151,7 +151,7 @@ class JobInfo extends CW_Controller
 		$this->smarty->assign('educationList', $educationList);
 		//取得通用水平列表
 		$query = $this->db->query('SELECT id, name FROM commonLevel WHERE active =1');
-		$commonLevelList = array();
+		$commonLevelList = array('' => '请选择');
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result() as $row)
@@ -162,7 +162,7 @@ class JobInfo extends CW_Controller
 		$this->smarty->assign('commonLevelList', $commonLevelList);
 		//取得语言列表
 		$query = $this->db->query('SELECT id, name FROM language WHERE active =1');
-		$languageList = array();
+		$languageList = array('' => '请选择');
 		if ($query->num_rows() > 0)
 		{
 			foreach ($query->result() as $row)
@@ -287,6 +287,33 @@ class JobInfo extends CW_Controller
 		{
 			return TRUE;
 		}
+	}
+
+	public function addLanguage()
+	{
+		//取得通用水平列表
+		$query = $this->db->query('SELECT id, name FROM commonLevel WHERE active =1');
+		$commonLevelList = array('' => '请选择');
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+				$commonLevelList[$row->id] = $row->name;
+			}
+		}
+		$this->smarty->assign('commonLevelList', $commonLevelList);
+		//取得语言列表
+		$query = $this->db->query('SELECT id, name FROM language WHERE active =1');
+		$languageList = array('' => '请选择');
+		if ($query->num_rows() > 0)
+		{
+			foreach ($query->result() as $row)
+			{
+				$languageList[$row->id] = $row->name;
+			}
+		}
+		$this->smarty->assign('languageList', $languageList);
+		$this->smarty->display('jobInfo_addLanguage.tpl');
 	}
 
 }
