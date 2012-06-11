@@ -351,6 +351,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		$role = "enterpriseUser";
 		$enterPriseUser = $this->session->userdata('userId');
 		//新建交易状态
+		$this->db->trans_start();
 		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?, ?) vResult', array(
 			$talent,
 			$job,

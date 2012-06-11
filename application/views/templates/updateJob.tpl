@@ -25,7 +25,13 @@
 						}
 					});
 				});
-				reflashCityBusinessArea(/*{$jobInfo['city']|default:'null'}*/, /*{$jobInfo['businessArea']|default:'null'}*/);
+				//设置重置按钮
+				$("#resetButton").click(function() {
+					window.location.href = "{cw_ci_site_url param1='jobInfo/index'}" + "/" + "{$jobInfo['id']|default:$jobInfo['job']}";
+				});
+				var tmpCity = /*{$jobInfo['city']|default:'null'}*/+'';
+				var tmpBusinessArea = /*{$jobInfo['businessArea']|default:'null'}*/+'';
+				reflashCityBusinessArea(tmpCity, tmpBusinessArea);
 			});
 			function reflashCityBusinessArea(city, businessArea) {
 				var ajaxURL = "{cw_ci_site_url param1='jobInfo/setCityBusinessArea'}/" + city + '/' + businessArea;
@@ -207,7 +213,7 @@
 						<input type="submit" value="保存" />
 					</div>
 					<div class="span-5">
-						<input type="button" value="重置" />
+						<input id="resetButton" type="button" value="重置" />
 						<!--only need to reload page-->
 					</div>
 					<div class="span-5">

@@ -71,8 +71,7 @@ class JobInfo extends CW_Controller
 		$jobInfo['businessArea'] = $this->input->post('businessArea');
 		$jobInfo['onboardDate'] = $this->input->post('onboardDate');
 		$jobInfo['salaryFrom'] = $this->input->post('salaryFrom');
-		$jobInfo['bonusList'] = $this->input->post('bonus');
-		$jobInfo['welfareList'] = $this->input->post('welfare');
+		$jobInfo['salaryTo'] = NULL;
 		$jobInfo['commissionDate'] = $this->input->post('commissionDate');
 		$jobInfo['sex'] = $this->input->post('sex');
 		$jobInfo['ageFrom'] = $this->input->post('ageFrom');
@@ -80,12 +79,35 @@ class JobInfo extends CW_Controller
 		$jobInfo['heightFrom'] = $this->input->post('heightFrom');
 		$jobInfo['heightTo'] = $this->input->post('heightTo');
 		$jobInfo['education'] = $this->input->post('education');
-		$jobInfo['languageList'] = $this->input->post('language');
-		$jobInfo['languageLevelList'] = $this->input->post('languageLevel');
 		$jobInfo['specialSkill'] = $this->input->post('specialSkill');
 		$jobInfo['detail'] = $this->input->post('detail');
+		$jobInfo['bonusList'] = $this->input->post('bonus');
+		$jobInfo['welfareList'] = $this->input->post('welfare');
+		$jobInfo['languageList'] = $this->input->post('language');
+		$jobInfo['languageLevelList'] = $this->input->post('languageLevel');
+		//处理参数，把空字符串转变成NULL
+		foreach ($jobInfo as $key => $val)
+		{
+			if ($key == 'bonusList' || $key == 'languageList' || $key == 'languageLevelList' || $key == 'welfareList')
+			{
+				if ($val == FALSE)
+				{
+					$jobInfo[$key] = array();
+				}
+			}
+			//处理其他字符串的null转换
+			else
+			{
+				$jobInfo[$key] = emptyToNull($val);
+			}
+		}
+		//处理城市和商区的关系，只要有商区，就把城市设为空
+		if ($jobInfo['businessArea'] != NULL)
+		{
+			$jobInfo['city'] = NULL;
+		}
 		$this->smarty->assign('jobInfo', $jobInfo);
-		if ($this->authenticate($var))
+		if ($this->authenticate($var, $jobInfo))
 		{
 			//成功
 			$this->smarty->assign('okMsg', '更新成功!');
@@ -99,7 +121,7 @@ class JobInfo extends CW_Controller
 		$this->smarty->display('updateJob.tpl');
 	}
 
-	public function authenticate(&$var)
+	public function authenticate(&$var, $jobInfo)
 	{
 		$this->lang->load('form_validation', 'chinese');
 		//检查数据格式
@@ -111,27 +133,128 @@ class JobInfo extends CW_Controller
 		//保存数据
 		else
 		{
-			$enterprise = $this->input->post('enterprise');
-			$name = $this->input->post('name');
-			$phone = $this->input->post('phone');
-			$mail = $this->input->post('mail');
-			$address = $this->input->post('address');
-			$introduction = $this->input->post('introduction');
-			$query = $this->db->query('SELECT updateEnterprise(?, ?, ?, ?, ?, ?) result', array(
-				$enterprise,
-				$name,
-				$phone,
-				$mail,
-				$address,
-				$introduction
+			$this->db->trans_start();
+			//更新表job
+			$query = $this->db->query('SELECT updateJob(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+				$jobInfo['job'],
+				$jobInfo['title'],
+				$jobInfo['requireNumber'],
+				$jobInfo['workType'],
+				$jobInfo['contractType'],
+				$jobInfo['workTime'],
+				$jobInfo['city'],
+				$jobInfo['businessArea'],
+				$jobInfo['onboardDate'],
+				$jobInfo['salaryFrom'],
+				$jobInfo['salaryTo'],
+				$jobInfo['commissionDate'],
+				$jobInfo['sex'],
+				$jobInfo['ageFrom'],
+				$jobInfo['ageTo'],
+				$jobInfo['heightFrom'],
+				$jobInfo['heightTo'],
+				$jobInfo['education'],
+				$jobInfo['specialSkill'],
+				$jobInfo['detail']
 			));
 			if ($query->first_row()->result == 1)
 			{
-				return TRUE;
+				//处理jobBonus
+				//删除原有记录
+				if ($this->db->query('DELETE FROM jobBonus WHERE job = ?', array($jobInfo['job'])))
+				{
+					//插入新记录
+					foreach ($jobInfo['bonusList'] as $bonus)
+					{
+						if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+							$jobInfo['job'],
+							$bonus
+						)))
+						{
+						}
+						else
+						{
+							$var = '数据保存失败(新建jobBonus出错)!';
+							break;
+						}
+					}
+				}
+				else
+				{
+					$var = '数据保存失败!(删除原有jobBonus记录出错)';
+				}
+				if ($var == NULL)
+				{
+					//处理jobLanguage
+					//删除原有记录
+					if ($this->db->query('DELETE FROM jobLanguage WHERE job = ?', array($jobInfo['job'])))
+					{
+						//插入新记录
+						$tmpLength = count($jobInfo['languageList']);
+						for ($i = 0; $i < $tmpLength; $i += 1)
+						{
+							if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
+								$jobInfo['job'],
+								$jobInfo['languageList'][$i],
+								$jobInfo['languageLevelList'][$i],
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(新建jobLanguage出错)!';
+								break;
+							}
+						}
+					}
+					else
+					{
+						$var = '数据保存失败!(删除原有jobLanguage记录出错)';
+					}
+				}
+				if ($var == NULL)
+				{
+					//处理jobWelfare
+					//删除原有记录
+					if ($this->db->query('DELETE FROM jobWelfare WHERE job = ?', array($jobInfo['job'])))
+					{
+						//插入新记录
+						$tmpLength = count($jobInfo['welfareList']);
+						for ($i = 0; $i < $tmpLength; $i += 1)
+						{
+							if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$jobInfo['job'],
+								$jobInfo['welfareList'][$i]
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(新建jobWelfare出错)!';
+								break;
+							}
+						}
+					}
+					else
+					{
+						$var = '数据保存失败!(删除原有jobWelfare记录出错)';
+					}
+				}
+				if ($var == NULL)
+				{
+					$this->db->trans_commit();
+					return TRUE;
+				}
+				else
+				{
+					$this->db->trans_rollback();
+					return FALSE;
+				}
 			}
 			else
 			{
-				$var = '数据保存失败!';
+				$var = '数据保存失败(插入job出错)!';
+				$this->db->trans_rollback();
 				return FALSE;
 			}
 		}
