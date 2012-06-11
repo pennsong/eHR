@@ -59,7 +59,13 @@ class JobInfo extends CW_Controller
 		$this->smarty->display('updateJob.tpl');
 	}
 
-	public function validateUpdate()
+	public function createJob()
+	{
+		$this->initMasterData();
+		$this->smarty->display('createJob.tpl');
+	}
+
+	public function validate($type)
 	{
 		$var = '';
 		//空字符串,'null'(不区分大小写)或不存在(false)的变量转换为NULL
@@ -72,10 +78,10 @@ class JobInfo extends CW_Controller
 		{
 			$_POST['city'] = NULL;
 		}
-		if ($this->authenticate($var))
+		if ($this->authenticate($var, $type))
 		{
 			//成功
-			$this->smarty->assign('okMsg', '更新成功!');
+			$this->smarty->assign('okMsg', '成功!');
 		}
 		else
 		{
@@ -83,10 +89,267 @@ class JobInfo extends CW_Controller
 			$this->smarty->assign('errorMsg', $var);
 		}
 		$this->initMasterData();
-		$this->smarty->display('updateJob.tpl');
+		if ($type == 'update')
+		{
+			$this->smarty->display('updateJob.tpl');
+		}
+		else if ($type == 'create')
+		{
+			$this->smarty->display('createJob.tpl');
+		}
 	}
 
-	public function authenticate(&$var)
+	public function saveUpdate(&$var)
+	{
+		$this->db->trans_start();
+		//更新表job
+		$query = $this->db->query('SELECT updateJob(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			$this->input->post('job'),
+			$this->input->post('title'),
+			$this->input->post('requireNumber'),
+			$this->input->post('workType'),
+			$this->input->post('contractType'),
+			$this->input->post('workTime'),
+			$this->input->post('city'),
+			$this->input->post('businessArea'),
+			$this->input->post('onboardDate'),
+			$this->input->post('salaryFrom'),
+			NULL,
+			$this->input->post('commissionDate'),
+			$this->input->post('sex'),
+			$this->input->post('ageFrom'),
+			$this->input->post('ageTo'),
+			$this->input->post('heightFrom'),
+			$this->input->post('heightTo'),
+			$this->input->post('education'),
+			$this->input->post('specialSkill'),
+			$this->input->post('detail')
+		));
+		if ($query->first_row()->result == 1)
+		{
+			//处理jobBonus
+			//删除原有记录
+			if ($this->db->query('DELETE FROM jobBonus WHERE job = ?', array($this->input->post('job'))))
+			{
+				//插入新记录
+				if ($this->input->post('bonusList') != NULL)
+				{
+					foreach ($this->input->post('bonusList') as $bonus)
+					{
+						if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+							$this->input->post('job'),
+							$bonus
+						)))
+						{
+						}
+						else
+						{
+							$var = '数据保存失败(新建jobBonus出错)!';
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				$var = '数据保存失败!(删除原有jobBonus记录出错)';
+			}
+			if ($var == NULL)
+			{
+				//处理jobLanguage
+				//删除原有记录
+				if ($this->db->query('DELETE FROM jobLanguage WHERE job = ?', array($this->input->post('job'))))
+				{
+					//插入新记录
+					if ($this->input->post('languageList') != NULL)
+					{
+						$languageLevelList = $this->input->post('languageLevelList');
+						$tmpIndex = 0;
+						foreach ($this->input->post('languageList') as $language)
+						{
+							if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
+								$this->input->post('job'),
+								$language,
+								$languageLevelList[$tmpIndex++]
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(新建jobLanguage出错)!';
+								break;
+							}
+						}
+					}
+				}
+				else
+				{
+					$var = '数据保存失败!(删除原有jobLanguage记录出错)';
+				}
+			}
+			if ($var == NULL)
+			{
+				//处理jobWelfare
+				//删除原有记录
+				if ($this->db->query('DELETE FROM jobWelfare WHERE job = ?', array($this->input->post('job'))))
+				{
+					//插入新记录
+					if ($this->input->post('welfareList') != NULL)
+					{
+						foreach ($this->input->post('welfareList') as $welfare)
+						{
+							if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$this->input->post('job'),
+								$welfare
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(新建jobWelfare出错)!';
+								break;
+							}
+						}
+					}
+				}
+				else
+				{
+					$var = '数据保存失败!(删除原有jobWelfare记录出错)';
+				}
+			}
+			if ($var == NULL)
+			{
+				$this->db->trans_commit();
+				return TRUE;
+			}
+			else
+			{
+				$this->db->trans_rollback();
+				return FALSE;
+			}
+		}
+		else
+		{
+			$var = '数据保存失败(插入job出错)!';
+			$this->db->trans_rollback();
+			return FALSE;
+		}
+	}
+
+	public function saveCreate(&$var)
+	{
+		$this->db->trans_start();
+		//创建job
+		$query = $this->db->query('SELECT createJob(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			$this->session->userdata('userId'),
+			$this->input->post('title'),
+			$this->input->post('requireNumber'),
+			$this->input->post('workType'),
+			$this->input->post('contractType'),
+			$this->input->post('workTime'),
+			$this->input->post('city'),
+			$this->input->post('businessArea'),
+			$this->input->post('onboardDate'),
+			$this->input->post('salaryFrom'),
+			NULL,
+			$this->input->post('commissionDate'),
+			$this->input->post('sex'),
+			$this->input->post('ageFrom'),
+			$this->input->post('ageTo'),
+			$this->input->post('heightFrom'),
+			$this->input->post('heightTo'),
+			$this->input->post('education'),
+			$this->input->post('specialSkill'),
+			$this->input->post('detail')
+		));
+		if (($job = $query->first_row()->result) > 0)
+		{
+			//处理jobBonus
+			//插入新记录
+			if ($this->input->post('bonusList') != NULL)
+			{
+				foreach ($this->input->post('bonusList') as $bonus)
+				{
+					if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+						$job,
+						$bonus
+					)))
+					{
+					}
+					else
+					{
+						$var = '数据保存失败(新建jobBonus出错)!';
+						break;
+					}
+				}
+			}
+			if ($var == NULL)
+			{
+				//处理jobLanguage
+				//插入新记录
+				if ($this->input->post('languageList') != NULL)
+				{
+					$languageLevelList = $this->input->post('languageLevelList');
+					$tmpIndex = 0;
+					foreach ($this->input->post('languageList') as $language)
+					{
+						if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
+							$job,
+							$language,
+							$languageLevelList[$tmpIndex++]
+						)))
+						{
+						}
+						else
+						{
+							$var = '数据保存失败(新建jobLanguage出错)!';
+							break;
+						}
+					}
+				}
+			}
+			if ($var == NULL)
+			{
+				//处理jobWelfare
+				//插入新记录
+				if ($this->input->post('welfareList') != NULL)
+				{
+					foreach ($this->input->post('welfareList') as $welfare)
+					{
+						if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+							$job,
+							$welfare
+						)))
+						{
+						}
+						else
+						{
+							$var = '数据保存失败(新建jobWelfare出错)!';
+							break;
+						}
+					}
+				}
+			}
+			if ($var == NULL)
+			{
+				$this->db->trans_commit();
+				return TRUE;
+			}
+			else
+			{
+				$this->db->trans_rollback();
+				return FALSE;
+			}
+		}
+		else
+		{
+			$var = '数据保存失败(创建job出错)!';
+			$this->db->trans_rollback();
+			return FALSE;
+		}
+	}
+
+	public function authenticate(&$var, $type)
 	{
 		$this->lang->load('form_validation', 'chinese');
 		//检查数据格式
@@ -98,138 +361,27 @@ class JobInfo extends CW_Controller
 		//保存数据
 		else
 		{
-			$this->db->trans_start();
-			//更新表job
-			$query = $this->db->query('SELECT updateJob(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
-				$this->input->post('job'),
-				$this->input->post('title'),
-				$this->input->post('requireNumber'),
-				$this->input->post('workType'),
-				$this->input->post('contractType'),
-				$this->input->post('workTime'),
-				$this->input->post('city'),
-				$this->input->post('businessArea'),
-				$this->input->post('onboardDate'),
-				$this->input->post('salaryFrom'),
-				NULL,
-				$this->input->post('commissionDate'),
-				$this->input->post('sex'),
-				$this->input->post('ageFrom'),
-				$this->input->post('ageTo'),
-				$this->input->post('heightFrom'),
-				$this->input->post('heightTo'),
-				$this->input->post('education'),
-				$this->input->post('specialSkill'),
-				$this->input->post('detail')
-			));
-			if ($query->first_row()->result == 1)
+			if ($type == 'update')
 			{
-				//处理jobBonus
-				//删除原有记录
-				if ($this->db->query('DELETE FROM jobBonus WHERE job = ?', array($this->input->post('job'))))
+				if ($this->saveUpdate($var))
 				{
-					//插入新记录
-					if ($this->input->post('bonusList') != NULL)
-					{
-						foreach ($this->input->post('bonusList') as $bonus)
-						{
-							if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
-								$this->input->post('job'),
-								$bonus
-							)))
-							{
-							}
-							else
-							{
-								$var = '数据保存失败(新建jobBonus出错)!';
-								break;
-							}
-						}
-					}
-				}
-				else
-				{
-					$var = '数据保存失败!(删除原有jobBonus记录出错)';
-				}
-				if ($var == NULL)
-				{
-					//处理jobLanguage
-					//删除原有记录
-					if ($this->db->query('DELETE FROM jobLanguage WHERE job = ?', array($this->input->post('job'))))
-					{
-						//插入新记录
-						if ($this->input->post('languageList') != NULL)
-						{
-							$languageLevelList = $this->input->post('languageLevelList');
-							$tmpIndex = 0;
-							foreach ($this->input->post('languageList') as $language)
-							{
-								if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
-									$this->input->post('job'),
-									$language,
-									$languageLevelList[$tmpIndex++]
-								)))
-								{
-								}
-								else
-								{
-									$var = '数据保存失败(新建jobLanguage出错)!';
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						$var = '数据保存失败!(删除原有jobLanguage记录出错)';
-					}
-				}
-				if ($var == NULL)
-				{
-					//处理jobWelfare
-					//删除原有记录
-					if ($this->db->query('DELETE FROM jobWelfare WHERE job = ?', array($this->input->post('job'))))
-					{
-						//插入新记录
-						if ($this->input->post('welfareList') != NULL)
-						{
-							foreach ($this->input->post('welfareList') as $welfare)
-							{
-								if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
-									$this->input->post('job'),
-									$welfare
-								)))
-								{
-								}
-								else
-								{
-									$var = '数据保存失败(新建jobWelfare出错)!';
-									break;
-								}
-							}
-						}
-					}
-					else
-					{
-						$var = '数据保存失败!(删除原有jobWelfare记录出错)';
-					}
-				}
-				if ($var == NULL)
-				{
-					$this->db->trans_commit();
 					return TRUE;
 				}
 				else
 				{
-					$this->db->trans_rollback();
 					return FALSE;
 				}
 			}
-			else
+			else if ($type == 'create')
 			{
-				$var = '数据保存失败(插入job出错)!';
-				$this->db->trans_rollback();
-				return FALSE;
+				if ($this->saveCreate($var))
+				{
+					return TRUE;
+				}
+				else
+				{
+					return FALSE;
+				}
 			}
 		}
 	}

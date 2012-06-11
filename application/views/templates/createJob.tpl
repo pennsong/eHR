@@ -1,6 +1,6 @@
 <!--{extends file='enterprisePage.tpl'}-->
 <!--{block name=title}-->
-<title>更新职位</title>
+<title>创建职位</title>
 <!--{/block}-->
 <!--{block name=style}-->
 <style type="text/css" media="screen">
@@ -27,7 +27,7 @@
 		});
 		//设置重置按钮
 		$("#resetButton").click(function() {
-			window.location.href = "{site_url('jobInfo/index')}" + "/" + "{$smarty.post.job}";
+			window.location.href = "{site_url('jobInfo/createJob')}";
 		});
 		//设置返回按钮
 		$("#backButton").click(function() {
@@ -55,10 +55,7 @@
 <!--{/block}-->
 <!--{block name=subBody}-->
 <div class="prepend-1 span-62">
-	<form id="jobInfoForm" action="{site_url('jobInfo/validate/update')}" method="post">
-		<div class="span-62">
-			<input type="hidden" id="job" name="job" value="{$smarty.post.job}"/>
-		</div>
+	<form id="jobInfoForm" action="{site_url('jobInfo/validate/create')}" method="post">
 		<div class="span-62">
 			<!--{if isset($errorMsg)}-->
 			<!--{$errorMsg}-->
@@ -74,25 +71,25 @@
 				职位名称
 			</div>
 			<div class="span-9">
-				<input id="title" name="title" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$smarty.post.title}"/>
+				<input id="title" name="title" type="text" class="validate[required, custom[onlyNumberLetterChinese]]" value="{$smarty.post.title|default:''}"/>
 			</div>
 			<div class="span-5 label1">
 				招聘人数
 			</div>
 			<div class="span-9">
-				<input id="requireNumber" name="requireNumber" type="text" class="validate[custom[onlyNumberSp]]" value="{$smarty.post.requireNumber}"/>
+				<input id="requireNumber" name="requireNumber" type="text" class="validate[custom[onlyNumberSp]]" value="{$smarty.post.requireNumber|default:''}"/>
 			</div>
 			<div class="span-5 label1">
 				工作性质
 			</div>
 			<div class="span-9">
-				{html_options id=workType name=workType options=$workTypeList selected=$smarty.post.workType}
+				{html_options id=workType name=workType options=$workTypeList selected=$smarty.post.workType|default:''}
 			</div>
 			<div class="span-7 label1">
 				合同性质
 			</div>
 			<div class="span-9">
-				{html_options id=contractType name=contractType options=$contractTypeList selected=$smarty.post.contractType}
+				{html_options id=contractType name=contractType options=$contractTypeList selected=$smarty.post.contractType|default:''}
 			</div>
 		</div>
 		<div class="span-62">
@@ -100,14 +97,14 @@
 				工作时间
 			</div>
 			<div class="span-9">
-				{html_options id=workTime name=workTime options=$workTimeList selected=$smarty.post.workTime}
+				{html_options id=workTime name=workTime options=$workTimeList selected=$smarty.post.workTime|default:''}
 			</div>
 			<div id="cityBusinessSection"></div>
 			<div class="span-7 label1">
 				预计到岗日期
 			</div>
 			<div class="span-9">
-				<input id="onboardDate" name="onboardDate" type="text" class="validate[custom[date]]" value="{$smarty.post.onboardDate}"/>
+				<input id="onboardDate" name="onboardDate" type="text" class="validate[custom[date]]" value="{$smarty.post.onboardDate|default:''}"/>
 			</div>
 		</div>
 		<div class="span-62">
@@ -115,7 +112,7 @@
 				薪资
 			</div>
 			<div class="span-9">
-				<input id="salaryFrom" name="salaryFrom" type="text" class="validate[custom[onlyNumberSp]]" value="{$smarty.post.salaryFrom}"/>
+				<input id="salaryFrom" name="salaryFrom" type="text" class="validate[custom[onlyNumberSp]]" value="{$smarty.post.salaryFrom|default:''}"/>
 			</div>
 			<div class="span-5 label1">
 				奖金
@@ -133,7 +130,7 @@
 				佣金获取日
 			</div>
 			<div class="span-9">
-				{html_options id=commissionDate name=commissionDate options=$commissionDateList selected=$smarty.post.commissionDate}
+				{html_options id=commissionDate name=commissionDate options=$commissionDateList selected=$smarty.post.commissionDate|default:''}
 			</div>
 		</div>
 		<div class="span-62 head3">
@@ -144,31 +141,31 @@
 				性别
 			</div>
 			<div class="span-9">
-				{html_options id=sex name=sex options=$sexList selected=$smarty.post.sex}
+				{html_options id=sex name=sex options=$sexList selected=$smarty.post.sex|default:''}
 			</div>
 			<div class="span-5 label1">
 				年龄
 			</div>
 			<div class="span-3">
-				<input id="ageFrom" name="ageFrom" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.ageFrom}"/>
+				<input id="ageFrom" name="ageFrom" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.ageFrom|default:''}"/>
 			</div>
 			<div class="span-2">
 				至
 			</div>
 			<div class="span-3">
-				<input id="ageTo" name="ageTo" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.ageTo}"/>
+				<input id="ageTo" name="ageTo" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.ageTo|default:''}"/>
 			</div>
 			<div class="prepend-1 span-5 label1">
 				身高
 			</div>
 			<div class="span-3">
-				<input id="heightFrom" name="heightFrom" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.heightFrom}"/>
+				<input id="heightFrom" name="heightFrom" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.heightFrom|default:''}"/>
 			</div>
 			<div class="span-2">
 				至
 			</div>
 			<div class="span-3">
-				<input id="heightTo" name="heightTo" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.heightTo}"/>
+				<input id="heightTo" name="heightTo" type="text" class="locShort validate[custom[onlyNumberSp]]" value="{$smarty.post.heightTo|default:''}"/>
 			</div>
 		</div>
 		<div class="span-62">
@@ -176,7 +173,7 @@
 				学历
 			</div>
 			<div class="span-9">
-				{html_options id=education name=education options=$educationList selected=$smarty.post.education}
+				{html_options id=education name=education options=$educationList selected=$smarty.post.education|default:''}
 			</div>
 		</div>
 		<div class="span-62 head3">
@@ -206,13 +203,13 @@
 			特殊技能
 		</div>
 		<div class="span-62">
-			<textarea id="specialSkill" name="specialSkill" cols="40" rows="5" class="">{$smarty.post.specialSkill}</textarea>
+			<textarea id="specialSkill" name="specialSkill" cols="40" rows="5" class="">{$smarty.post.specialSkill|default:''}</textarea>
 		</div>
 		<div class="span-62 head3">
 			工作要求及描述
 		</div>
 		<div class="span-62">
-			<textarea id="detail" name="detail" cols="40" rows="5" class="">{$smarty.post.detail}</textarea>
+			<textarea id="detail" name="detail" cols="40" rows="5" class="">{$smarty.post.detail|default:''}</textarea>
 		</div>
 		<div class="span-5">
 			<input type="submit" value="保存" />
