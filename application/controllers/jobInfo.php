@@ -18,6 +18,7 @@ class JobInfo extends CW_Controller
 		//取得职位信息
 		$query = $this->db->query('SELECT * FROM job WHERE active =1 AND id = ?', $job);
 		$jobInfo = $query->first_row('array');
+		$jobInfo['job'] = $jobInfo['id'];
 		//取得当前职位奖金列表
 		$query = $this->db->query('SELECT bonus FROM jobBonus WHERE active=1 AND job=?', array($job));
 		$jobBonusList = array();
@@ -54,60 +55,24 @@ class JobInfo extends CW_Controller
 		}
 		$jobInfo['languageList'] = $jobLanguageList;
 		$jobInfo['languageLevelList'] = $jobLanguageLevelList;
-		$this->smarty->assign('jobInfo', $jobInfo);
+		$_POST = $jobInfo;
 		$this->smarty->display('updateJob.tpl');
 	}
 
 	public function validateUpdate()
 	{
 		$var = '';
-		$jobInfo['job'] = $this->input->post('job');
-		$jobInfo['title'] = $this->input->post('title');
-		$jobInfo['requireNumber'] = $this->input->post('requireNumber');
-		$jobInfo['workType'] = $this->input->post('workType');
-		$jobInfo['contractType'] = $this->input->post('contractType');
-		$jobInfo['workTime'] = $this->input->post('workTime');
-		$jobInfo['city'] = $this->input->post('city');
-		$jobInfo['businessArea'] = $this->input->post('businessArea');
-		$jobInfo['onboardDate'] = $this->input->post('onboardDate');
-		$jobInfo['salaryFrom'] = $this->input->post('salaryFrom');
-		$jobInfo['salaryTo'] = NULL;
-		$jobInfo['commissionDate'] = $this->input->post('commissionDate');
-		$jobInfo['sex'] = $this->input->post('sex');
-		$jobInfo['ageFrom'] = $this->input->post('ageFrom');
-		$jobInfo['ageTo'] = $this->input->post('ageTo');
-		$jobInfo['heightFrom'] = $this->input->post('heightFrom');
-		$jobInfo['heightTo'] = $this->input->post('heightTo');
-		$jobInfo['education'] = $this->input->post('education');
-		$jobInfo['specialSkill'] = $this->input->post('specialSkill');
-		$jobInfo['detail'] = $this->input->post('detail');
-		$jobInfo['bonusList'] = $this->input->post('bonus');
-		$jobInfo['welfareList'] = $this->input->post('welfare');
-		$jobInfo['languageList'] = $this->input->post('language');
-		$jobInfo['languageLevelList'] = $this->input->post('languageLevel');
-		//处理参数，把空字符串转变成NULL
-		foreach ($jobInfo as $key => $val)
+		//空字符串,'null'(不区分大小写)或不存在(false)的变量转换为NULL
+		foreach ($_POST as &$val)
 		{
-			if ($key == 'bonusList' || $key == 'languageList' || $key == 'languageLevelList' || $key == 'welfareList')
-			{
-				if ($val == FALSE)
-				{
-					$jobInfo[$key] = array();
-				}
-			}
-			//处理其他字符串的null转换
-			else
-			{
-				$jobInfo[$key] = emptyToNull($val);
-			}
+			$val = emptyToNull($val);
 		}
 		//处理城市和商区的关系，只要有商区，就把城市设为空
-		if ($jobInfo['businessArea'] != NULL)
+		if ($this->input->post('businessArea') != NULL)
 		{
-			$jobInfo['city'] = NULL;
+			$_POST['city'] = NULL;
 		}
-		$this->smarty->assign('jobInfo', $jobInfo);
-		if ($this->authenticate($var, $jobInfo))
+		if ($this->authenticate($var))
 		{
 			//成功
 			$this->smarty->assign('okMsg', '更新成功!');
@@ -121,7 +86,7 @@ class JobInfo extends CW_Controller
 		$this->smarty->display('updateJob.tpl');
 	}
 
-	public function authenticate(&$var, $jobInfo)
+	public function authenticate(&$var)
 	{
 		$this->lang->load('form_validation', 'chinese');
 		//检查数据格式
@@ -136,46 +101,49 @@ class JobInfo extends CW_Controller
 			$this->db->trans_start();
 			//更新表job
 			$query = $this->db->query('SELECT updateJob(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
-				$jobInfo['job'],
-				$jobInfo['title'],
-				$jobInfo['requireNumber'],
-				$jobInfo['workType'],
-				$jobInfo['contractType'],
-				$jobInfo['workTime'],
-				$jobInfo['city'],
-				$jobInfo['businessArea'],
-				$jobInfo['onboardDate'],
-				$jobInfo['salaryFrom'],
-				$jobInfo['salaryTo'],
-				$jobInfo['commissionDate'],
-				$jobInfo['sex'],
-				$jobInfo['ageFrom'],
-				$jobInfo['ageTo'],
-				$jobInfo['heightFrom'],
-				$jobInfo['heightTo'],
-				$jobInfo['education'],
-				$jobInfo['specialSkill'],
-				$jobInfo['detail']
+				$this->input->post('job'),
+				$this->input->post('title'),
+				$this->input->post('requireNumber'),
+				$this->input->post('workType'),
+				$this->input->post('contractType'),
+				$this->input->post('workTime'),
+				$this->input->post('city'),
+				$this->input->post('businessArea'),
+				$this->input->post('onboardDate'),
+				$this->input->post('salaryFrom'),
+				NULL,
+				$this->input->post('commissionDate'),
+				$this->input->post('sex'),
+				$this->input->post('ageFrom'),
+				$this->input->post('ageTo'),
+				$this->input->post('heightFrom'),
+				$this->input->post('heightTo'),
+				$this->input->post('education'),
+				$this->input->post('specialSkill'),
+				$this->input->post('detail')
 			));
 			if ($query->first_row()->result == 1)
 			{
 				//处理jobBonus
 				//删除原有记录
-				if ($this->db->query('DELETE FROM jobBonus WHERE job = ?', array($jobInfo['job'])))
+				if ($this->db->query('DELETE FROM jobBonus WHERE job = ?', array($this->input->post('job'))))
 				{
 					//插入新记录
-					foreach ($jobInfo['bonusList'] as $bonus)
+					if ($this->input->post('bonusList') != NULL)
 					{
-						if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
-							$jobInfo['job'],
-							$bonus
-						)))
+						foreach ($this->input->post('bonusList') as $bonus)
 						{
-						}
-						else
-						{
-							$var = '数据保存失败(新建jobBonus出错)!';
-							break;
+							if ($this->db->query('INSERT INTO jobBonus(`job`, `bonus`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$this->input->post('job'),
+								$bonus
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(新建jobBonus出错)!';
+								break;
+							}
 						}
 					}
 				}
@@ -187,23 +155,27 @@ class JobInfo extends CW_Controller
 				{
 					//处理jobLanguage
 					//删除原有记录
-					if ($this->db->query('DELETE FROM jobLanguage WHERE job = ?', array($jobInfo['job'])))
+					if ($this->db->query('DELETE FROM jobLanguage WHERE job = ?', array($this->input->post('job'))))
 					{
 						//插入新记录
-						$tmpLength = count($jobInfo['languageList']);
-						for ($i = 0; $i < $tmpLength; $i += 1)
+						if ($this->input->post('languageList') != NULL)
 						{
-							if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
-								$jobInfo['job'],
-								$jobInfo['languageList'][$i],
-								$jobInfo['languageLevelList'][$i],
-							)))
+							$languageLevelList = $this->input->post('languageLevelList');
+							$tmpIndex = 0;
+							foreach ($this->input->post('languageList') as $language)
 							{
-							}
-							else
-							{
-								$var = '数据保存失败(新建jobLanguage出错)!';
-								break;
+								if ($this->db->query('INSERT INTO jobLanguage(`job`, `language`, `commonLevel`, `updated`, `created`) VALUES(?, ?, ?, null, null)', array(
+									$this->input->post('job'),
+									$language,
+									$languageLevelList[$tmpIndex++]
+								)))
+								{
+								}
+								else
+								{
+									$var = '数据保存失败(新建jobLanguage出错)!';
+									break;
+								}
 							}
 						}
 					}
@@ -216,22 +188,24 @@ class JobInfo extends CW_Controller
 				{
 					//处理jobWelfare
 					//删除原有记录
-					if ($this->db->query('DELETE FROM jobWelfare WHERE job = ?', array($jobInfo['job'])))
+					if ($this->db->query('DELETE FROM jobWelfare WHERE job = ?', array($this->input->post('job'))))
 					{
 						//插入新记录
-						$tmpLength = count($jobInfo['welfareList']);
-						for ($i = 0; $i < $tmpLength; $i += 1)
+						if ($this->input->post('welfareList') != NULL)
 						{
-							if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
-								$jobInfo['job'],
-								$jobInfo['welfareList'][$i]
-							)))
+							foreach ($this->input->post('welfareList') as $welfare)
 							{
-							}
-							else
-							{
-								$var = '数据保存失败(新建jobWelfare出错)!';
-								break;
+								if ($this->db->query('INSERT INTO jobWelfare(`job`, `welfare`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+									$this->input->post('job'),
+									$welfare
+								)))
+								{
+								}
+								else
+								{
+									$var = '数据保存失败(新建jobWelfare出错)!';
+									break;
+								}
 							}
 						}
 					}
@@ -355,14 +329,19 @@ class JobInfo extends CW_Controller
 				'rules' => 'is_natural_no_zero'
 			),
 			array(
-				'field' => 'language[]',
+				'field' => 'languageList[]',
 				'label' => '语言',
 				'rules' => 'is_natural_no_zero'
 			),
 			array(
-				'field' => 'languageLevel[]',
+				'field' => 'languageLevelList[]',
 				'label' => '语言水平',
 				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'detail',
+				'label' => '岗位表述',
+				'rules' => 'required'
 			)
 		);
 		$this->form_validation->set_rules($config);
@@ -412,7 +391,7 @@ class JobInfo extends CW_Controller
 
 	public function validateCityBusinessArea($str)
 	{
-		if ((emptyToNull($this->input->post('city')) == null) && (emptyToNull($this->input->post('businessArea')) == null))
+		if (($this->input->post('city') == null) && ($this->input->post('businessArea') == null))
 		{
 			$this->form_validation->set_message('validateCityBusinessArea', '城市和商区不能都为空');
 			return FALSE;
@@ -566,6 +545,8 @@ class JobInfo extends CW_Controller
 
 	public function setCityBusinessArea($city = null, $businessArea = null)
 	{
+		$city = emptyToNull($city);
+		$businessArea = emptyToNull($businessArea);
 		//取得城市列表
 		$query = $this->db->query('SELECT id, name FROM city WHERE active =1');
 		$cityList = array('' => '请选择');
@@ -579,7 +560,7 @@ class JobInfo extends CW_Controller
 		$this->smarty->assign('cityList', $cityList);
 		$businessAreaList = array('' => '请选择');
 		//商区不为空
-		if (emptyToNull($businessArea) != NULL)
+		if ($businessArea != NULL)
 		{
 			//取得商区所属城市
 			$query = $this->db->query('SELECT city FROM businessArea WHERE active =1 AND id=?', array($businessArea));
@@ -599,7 +580,7 @@ class JobInfo extends CW_Controller
 		//商区为空
 		else
 		{
-			if (emptyToNull($city) == NULL)
+			if ($city == NULL)
 			{
 			}
 			else
