@@ -17,7 +17,7 @@
 					autoPositionUpdate : "true"
 				});
 				$("#addLanguage").click(function() {
-					var ajaxURL = "{cw_ci_site_url param1='jobInfo/addLanguage'}";
+					var ajaxURL = "{site_url('jobInfo/addLanguage')}";
 					$.ajax({
 						url : ajaxURL,
 						success : function(data, textStatus, jqXHR) {
@@ -27,14 +27,14 @@
 				});
 				//设置重置按钮
 				$("#resetButton").click(function() {
-					window.location.href = "{cw_ci_site_url param1='jobInfo/index'}" + "/" + "{$smarty.post.job}";
+					window.location.href = "{site_url('jobInfo/index')}" + "/" + "{$smarty.post.job}";
 				});
 				var tmpCity = /*{$smarty.post.city|default:'null'}*/+'';
 				var tmpBusinessArea = /*{$smarty.post.businessArea|default:'null'}*/+'';
 				reflashCityBusinessArea(tmpCity, tmpBusinessArea);
 			});
 			function reflashCityBusinessArea(city, businessArea) {
-				var ajaxURL = "{cw_ci_site_url param1='jobInfo/setCityBusinessArea'}/" + city + '/' + businessArea;
+				var ajaxURL = "{site_url('jobInfo/setCityBusinessArea')}/" + city + '/' + businessArea;
 				$("#cityBusinessSection").load(ajaxURL, function(responseText, textStatus, XMLHttpRequest) {
 					if(textStatus == 'success') {
 						$("#city").change(function() {
@@ -52,7 +52,7 @@
 	<body>
 		<div class="container">
 			<div class="prepend-1 span-62">
-				<form id="jobInfoForm" action="{cw_ci_site_url param1='jobInfo/validateUpdate'}" method="post">
+				<form id="jobInfoForm" action="{site_url('jobInfo/validateUpdate')}" method="post">
 					<div class="span-62">
 						<input type="hidden" id="job" name="job" value="{$smarty.post.job}"/>
 					</div>

@@ -37,7 +37,7 @@
 
 	function submitInterview(status) {
 		var url;
-		ajaxURL = "{cw_ci_site_url param1='enterpriseSearchF_job/createStatusF_deal'}/" + $("#talent").val() + '/' + $("#jobId").val() + "/" + status + "/" + encodeURIComponent(noteMsg(status));
+		ajaxURL = "{site_url('enterpriseSearchF_job/createStatusF_deal')}/" + $("#talent").val() + '/' + $("#jobId").val() + "/" + status + "/" + encodeURIComponent(noteMsg(status));
 		$.ajax({
 			url : ajaxURL,
 			success : function(data, textStatus, jqXHR) {

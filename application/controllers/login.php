@@ -198,6 +198,13 @@ class Login extends CW_Controller
 						$this->session->set_userdata('userName', strtolower($this->input->post('userName')));
 						$this->session->set_userdata('userId', $tmpArr['id']);
 						$this->session->set_userdata('type', 'enterpriseUser');
+						//取得公司名称
+						$query = $this->db->query('SELECT enterprise FROM enterpriseUser WHERE active = 1 AND id = ?', $tmpArr['id']);
+						$enterpriseId = $query->first_row()->enterprise;
+						$query = $this->db->query('SELECT name FROM enterprise WHERE active = 1 AND id = ?', array($enterpriseId));
+						$enterpriseName = $query->first_row()->name;
+						$this->session->set_userdata('enterpriseId', $enterpriseId);
+						$this->session->set_userdata('enterpriseName', $enterpriseName);
 						return TRUE;
 					}
 					else

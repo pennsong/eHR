@@ -14,7 +14,8 @@
 				if(browser == "Microsoft Internet Explorer") {
 					window.opener = self;
 				}
-				window.open("{cw_ci_site_url param1='enterpriseInfo/index'}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
+				{}
+				window.open("{site_url('enterpriseInfo/index')}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
 			}
 		</script>
 	</head>
@@ -22,13 +23,13 @@
 		<div class="container ">
 			<div class="span-64 last">
 				<div class="span-49">
-					<img class="" src="{cw_ci_base_url}resource/img/logo.png"/>
+					<img class="" src="{base_url()}resource/img/logo.png"/>
 				</div>
 				<div class="span-12">
-					<a href="#" onclick="openWindow()">欢迎您,公司用户:{$userName}</a>
+					<a href="#" onclick="openWindow()">欢迎您,公司用户:{$CI->session->userdata('enterpriseName')}</a>
 				</div>
 				<div class="span-3">
-					<a href="{cw_ci_site_url param1='login/logout'}">退出</a>
+					<a href="{site_url('login/logout')}">退出</a>
 				</div>
 			</div>
 			<div class="prepend-top span-64 last">
@@ -64,10 +65,10 @@
 						</div>
 						<div class="span-40">
 							<div class="span-8 locHMiddle">
-								<a class="text1" href="{cw_ci_site_url param1='enterpriseSearchF_job/index'}/{$job['id']}">{$job['fitNum']}</a>
+								<a class="text1" href="{site_url('enterpriseSearchF_job/index')}/{$job['id']}">{$job['fitNum']}</a>
 							</div>
 							<div class="span-8 locHMiddle">
-								<a class="text1" href="{cw_ci_site_url param1='jobInfo/index'}/{$job['id']}">{$job['requireNumber']}</a>
+								<a class="text1" href="{site_url('jobInfo/index')}/{$job['id']}">{$job['requireNumber']}</a>
 							</div>
 							<div class="span-8 locHMiddle">
 								<a class="text1" href="#{$job['id']}">{$job['choseNum']}</a>

@@ -68,14 +68,14 @@
 	<body>
 		<div class="container">
 			<div class="span-64 last">
-				  <img class="logo" src="{cw_ci_base_url}resource/img/logo.png"/>
+				  <img class="logo" src="{base_url()}resource/img/logo.png"/>
 			</div>
 			<div class="clear prepend-19 last append-bottom20">
 				<div class="head1">
 					欢迎来到E-hiring
 				</div>
 			</div>
-			<form id="locLoginForm" action="{cw_ci_site_url param1='login/validateLogin'}" method="post">
+			<form id="locLoginForm" action="{site_url('login/validateLogin')}" method="post">
 				<div class="clear prepend-19 append-bottom5">
 					<div class="label1">
 						用户名
@@ -109,7 +109,7 @@
 				</div>
 				<div class="clear prepend-19 append-bottom20 locUserType">
 					<div class="span-10 label1">{html_radios name='type' values=$typeId output=$typeName labels=FALSE selected=$type|default:1}</div>
-					<a href="{cw_ci_site_url param1='hunterInfo/noLogin_register'}">注册小猎头</a>
+					<a href="{site_url('hunterInfo/noLogin_register')}">注册小猎头</a>
 				</div>
 				<div class="clear prepend-19">
 					<div class="inline span-7">

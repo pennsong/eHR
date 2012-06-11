@@ -10,11 +10,6 @@ class EnterpriseMain extends CW_Controller
 
 	public function index()
 	{
-		//取得公司名称
-		$query = $this->db->query('SELECT enterprise FROM enterpriseUser WHERE active = 1 AND id = ?', array($this->session->userdata('userId')));
-		$enterpriseId = $query->first_row()->enterprise;
-		$query = $this->db->query('SELECT name FROM enterprise WHERE active = 1 AND id = ?', array($enterpriseId));
-		$this->smarty->assign('userName', $query->first_row()->name);
 		//取得职位列表
 		$query = $this->db->query('CALL getJobListF_enterpriseUser(?, ?, ?)', array(
 			$this->session->userdata('userId'),

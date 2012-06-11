@@ -38,7 +38,7 @@
 				if(browser == "Microsoft Internet Explorer") {
 					window.opener = self;
 				}
-				window.open("{cw_ci_site_url param1='enterpriseInfo/index'}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
+				window.open("{site_url('enterpriseInfo/index')}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
 			}
 
 
@@ -216,7 +216,7 @@
 						$(".locExtend").attr('openStatus', 'close');
 						$(".locDraw").html('');
 						$(".locDraw").hide();
-						$(".locDraw").load("{cw_ci_site_url param1='enterpriseSearchF_job/getTalentDetailContent'}/" + object.attr('talentId') + "/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
+						$(".locDraw").load("{site_url('enterpriseSearchF_job/getTalentDetailContent')}/" + object.attr('talentId') + "/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
 							if(textStatus == 'success') {
 								$(".locDraw").show();
 								object.html('<<');
@@ -232,16 +232,16 @@
 		<div class="container ">
 			<div class="span-64 last">
 				<div class="span-49">
-					<img class="" src="{cw_ci_base_url}resource/img/logo.png"/>
+					<img class="" src="{base_url()}resource/img/logo.png"/>
 				</div>
 				<div class="span-12">
 					<a href="#" onclick="openWindow()">欢迎您,公司用户:{$userName}</a>
 				</div>
 				<div class="span-3">
-					<a href="{cw_ci_site_url param1='login/logout'}">退出</a>
+					<a href="{site_url('login/logout')}">退出</a>
 				</div>
 			</div>
-			<form id="locForm" action="{cw_ci_site_url param1='enterpriseSearchF_job/search'}" method="post">
+			<form id="locForm" action="{site_url('enterpriseSearchF_job/search')}" method="post">
 				<div class="prepend-1 span-10">
 					<input id="jobId" name="jobId" type="hidden" value="{$jobId}"/>
 					<div class="relative">
@@ -267,7 +267,7 @@
 				</div>
 			</form>
 			<div class="span-10">
-				<a href="{cw_ci_site_url param1='enterpriseMain'}">返回首页</a>
+				<a href="{site_url('enterpriseMain')}">返回首页</a>
 			</div>
 			<div class="clear prepend-1 span-62 prepend-top">
 				<div class="span-62">
@@ -405,7 +405,7 @@
 						</div>
 						<hr />
 						<!--{/foreach}-->
-						{cw_ci_create_links}
+						{$CI->pagination->create_links()}
 					</div>
 				</div>
 			</div>

@@ -17,7 +17,7 @@ class CW_Controller extends CI_Controller
 		$this->commonHead .= '<!-- Framework CSS -->'."\n";
 		$this->commonHead .= '<link rel="stylesheet" href="'.base_url().'resource/css/screen.css" type="text/css" media="screen, projection"/>'."\n";
 		$this->commonHead .= '<link rel="stylesheet" href="'.base_url().'resource/css/print.css" type="text/css" media="print"/>'."\n";
-		$this->commonHead .= '<!--[if lt IE 8]><link rel="stylesheet" href="{cw_ci_base_url}resource/css/ie.css" type="text/css" media="screen, projection"/><![endif]-->'."\n";
+		$this->commonHead .= '<!--[if lt IE 8]><link rel="stylesheet" href="'.base_url().'resource/css/ie.css" type="text/css" media="screen, projection"/><![endif]-->'."\n";
 		$this->commonHead .= '<link rel="stylesheet" href="'.base_url().'resource/css/user.css" type="text/css" media="screen, projection"/>'."\n";
 		$this->smarty->assign('commonHead', $this->commonHead);
 		$this->jqueryHead .= '<!-- jquery -->'."\n";
