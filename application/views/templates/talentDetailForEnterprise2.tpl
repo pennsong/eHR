@@ -23,7 +23,7 @@
 			}
 		});
 		//获得交易历史
-		$("#historySection").load("{site_url('enterpriseSearchF_job/getDealHistory')}/{$jobId}/{$talentInfo['id']}", function(responseText, textStatus, XMLHttpRequest) {
+		$("#historySection").load("{site_url('enterpriseSearchF_job/getDealHistory')}/{$talentInfo['id']}/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
 			if(textStatus == 'success') {
 			}
 		});
@@ -50,6 +50,7 @@
 </div>
 <div class="span-28">
 	<div class="span-28">
+		<input id="jobId" type="hidden" value="{$jobId}" />
 		<div class="span-5">
 			{$talentInfo['talentPersonName']}
 		</div>

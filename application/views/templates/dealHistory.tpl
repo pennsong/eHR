@@ -12,7 +12,7 @@
 		时间
 	</div>
 </div>
-<!--{if isset($dealHistory)}
+<!--{if isset($dealHistory)}-->
 <!--{foreach $dealHistory as $history}-->
 <div class="span-30">
 	<div class="span-7">
