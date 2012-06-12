@@ -42,6 +42,10 @@ class EnterpriseManageListDetail extends CW_Controller
 			$this->smarty->assign('enterpriseNote', $enterpriseNote);
 			$query->free_all();
 		}
+		//取得猎头信息
+		$query = $this->db->query('SELECT name FROM hunter WHERE active = 1 AND id = ?', array($talentInfo['hunter']));
+		$hunterName = $query->first_row()->name;
+		$this->smarty->assign('hunterName', $hunterName);
 		$this->smarty->assign('talentInfo', $talentInfo);
 		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->display('talentDetailForEnterprise2.tpl');

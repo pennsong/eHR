@@ -60,7 +60,7 @@
 		<div class="span-18">
 			<div class="span-18">
 				<input id="talent" type="hidden" value="{$talentInfo['id']}" />
-				<span class="text1">{$talentInfo['talentPersonName']}</span>
+				<span class="text1">{$hunterName}</span>
 			</div>
 			<div class="span-18">
 				<div class="span-5">
