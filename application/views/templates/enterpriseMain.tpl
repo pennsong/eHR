@@ -48,13 +48,13 @@
 				<a class="text1" href="{site_url('jobInfo/index')}/{$job['id']}">{$job['requireNumber']|default:'无限制'}</a>
 			</div>
 			<div class="span-8 locHMiddle">
-				<a class="text1" href="#{$job['id']}">{$job['choseNum']}</a>
+				<a class="text1" href="{site_url('enterpriseManageList/index')}/{$job['id']}/offer">{$job['choseNum']}</a>
 			</div>
 			<div class="span-8">
-				<a class="link1" href="#{$job['id']}">挑选人才</a>
+				<a class="link1" href="{site_url('enterpriseSearchF_job/index')}/{$job['id']}">挑选人才</a>
 			</div>
 			<div class="span-8">
-				<a class="text1" href="#{$job['id']}">管理人才</a>
+				<a class="text1" href="{site_url('enterpriseManageList/index/')}/{$job['id']}">管理人才</a>
 			</div>
 		</div>
 	</div>

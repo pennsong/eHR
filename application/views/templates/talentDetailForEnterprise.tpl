@@ -36,7 +36,7 @@
 	<div class="span-18">
 		<div class="span-18">
 			<input id="talent" type="hidden" value="{$talentInfo['id']}" />
-			<span class="text1">{$talentInfo['talentPersonName']}</span>
+			<span class="text1">{$hunterName}</span>
 		</div>
 		<div class="span-18">
 			<div class="span-5">
@@ -145,7 +145,7 @@
 		备注
 	</div>
 	<div class="span-23">
-		<textarea class="locHunterNote" style="width:315px; height:100px">{$talentInfo['hunterNote']}</textarea>
+		<textarea style="width:315px; height:100px">{$talentInfo['hunterNote']}</textarea>
 	</div>
 	<div id="locButtonLayout" class="span-28"></div>
 </div>

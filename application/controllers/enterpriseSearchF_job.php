@@ -265,6 +265,10 @@ class EnterpriseSearchF_job extends CW_Controller
 			$talentInfo['businessAreaList'] .= $city['businessAreaName'];
 		}
 		$query->free_all();
+		//取得猎头信息
+		$query = $this->db->query('SELECT name FROM hunter WHERE active = 1 AND id = ?', array($talentInfo['hunter']));
+		$hunterName = $query->first_row()->name;
+		$this->smarty->assign('hunterName', $hunterName);
 		$this->smarty->assign('talentInfo', $talentInfo);
 		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->display('talentDetailForEnterprise.tpl');
@@ -285,6 +289,14 @@ class EnterpriseSearchF_job extends CW_Controller
 		$query = $this->db->query('CALL getPointF_hunter(?)', array($hunter));
 		$hunterPoint = $query->first_row()->point;
 		echo '<span class="text1">'.$hunterPoint.'人</span>';
+	}
+
+	public function getHunterRecommendNum($hunter)
+	{
+		//获得猎头总共推荐人数
+		$query = $this->db->query('CALL getDealNumF_hunter(?)', array($hunter));
+		$recommendNum = $query->first_row()->num;
+		echo '<span class="text1">'.$recommendNum.'人</span>';
 	}
 
 	public function getButtonLayout($job, $talent)
@@ -340,6 +352,17 @@ class EnterpriseSearchF_job extends CW_Controller
 		{
 			$rejectDisabled = FALSE;
 		}
+		//设置deal状态名
+		if ($status != 0)
+		{
+			$query = $this->db->query('SELECT name FROM dealStatus WHERE id = ?', array($status));
+			$dealStatusName = $query->first_row()->name;
+		}
+		else
+		{
+			$dealStatusName = '未开始';
+		}
+		$this->smarty->assign('dealStatusName', $dealStatusName);
 		$this->smarty->assign('interviewDisabled', $interviewDisabled);
 		$this->smarty->assign('todoDisabled', $todoDisabled);
 		$this->smarty->assign('rejectDisabled', $rejectDisabled);
@@ -373,6 +396,50 @@ class EnterpriseSearchF_job extends CW_Controller
 			//新建失败
 			$this->db->trans_rollback();
 			echo 'failed';
+		}
+	}
+
+	public function getDealHistory($talent, $job)
+	{
+		//取得交易号
+		$query = $this->db->query('SELECT id FROM deal WHERE active = 1 AND talent = ? AND job = ?', array(
+			$talent,
+			$job
+		));
+		if ($query->num_rows() > 0)
+		{
+			$deal = $query->first_row()->id;
+			$query = $this->db->query('CALL getHistoryF_deal(?, ?, ?)', array(
+				$deal,
+				NULL,
+				NULL
+			));
+			if ($query->num_rows() > 0)
+			{
+				$this->smarty->assign('dealHistory', $query->result_array());
+			}
+			$query->free_all();
+		}
+		$this->smarty->display('dealHistory.tpl');
+	}
+
+	public function updateDealInfo($job, $talent, $enterpriseNote)
+	{
+		$this->db->trans_start();
+		$query = $this->db->query('SELECT updateDealEnterpriseNote(?, ?, ?) vResult', array(
+			$talent,
+			$job,
+			urldecode($enterpriseNote)
+		));
+		if ($query->first_row()->vResult == 1)
+		{
+			$this->db->trans_commit();
+			echo "修改成功";
+		}
+		else
+		{
+			$this->db->trans_rollback();
+			echo "修改失败";
 		}
 	}
 

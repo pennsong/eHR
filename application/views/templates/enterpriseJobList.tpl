@@ -28,7 +28,7 @@
 	<!--{foreach $jobList as $job}-->
 	<div class="span-60">
 		<div class="locHMiddle span-10 text1">
-			<a href="#">{$job['title']}</a>
+			<a href="{site_url('jobInfo/index/')}/{$job['id']}">{$job['title']}</a>
 		</div>
 		<div class="span-40 text1">
 			{$job['detail']}

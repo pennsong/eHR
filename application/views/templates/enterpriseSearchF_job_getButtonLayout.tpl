@@ -122,3 +122,6 @@
 		拒绝
 	</button>
 </div>
+<div class="clear prepend-6 span-10">
+	目前状态:{$dealStatusName}
+</div>
