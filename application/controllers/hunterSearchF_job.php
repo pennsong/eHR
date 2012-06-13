@@ -1,7 +1,7 @@
 <?php
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-class EnterpriseSearchF_job extends CW_Controller
+class HunterSearchF_job extends CW_Controller
 {
 	public function __construct()
 	{
@@ -399,28 +399,21 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 	}
 
-	public function getDealHistory($talent, $job)
+	public function getDealHistory($talent, $hunter, $enterprise)
 	{
-		//取得交易号
-		$query = $this->db->query('SELECT id FROM deal WHERE active = 1 AND talent = ? AND job = ?', array(
+		$query = $this->db->query('CALL getDealHistoryF_hunter_enterprise(?, ?, ?, ?, ?)', array(
 			$talent,
-			$job
+			$hunter,
+			$enterprise,
+			NULL,
+			NULL
 		));
 		if ($query->num_rows() > 0)
 		{
-			$deal = $query->first_row()->id;
-			$query = $this->db->query('CALL getHistoryF_deal(?, ?, ?)', array(
-				$deal,
-				NULL,
-				NULL
-			));
-			if ($query->num_rows() > 0)
-			{
-				$this->smarty->assign('dealHistory', $query->result_array());
-			}
-			$query->free_all();
+			$this->smarty->assign('dealHistory', $query->result_array());
 		}
-		$this->smarty->display('enterpriseDealHistory.tpl');
+		$query->free_all();
+		$this->smarty->display('hunterDealHistory.tpl');
 	}
 
 	public function updateDealInfo($job, $talent, $enterpriseNote)

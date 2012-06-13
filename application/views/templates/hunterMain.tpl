@@ -14,7 +14,7 @@
 				if(browser == "Microsoft Internet Explorer") {
 					window.opener = self;
 				}
-				window.open("{site_url('hunterInfo/updateInfo')}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
+				window.open("{site_url('hunterInfo/index')}/{$CI->session->userdata('userId')}", 'null', 'width=550,height=480,toolbar=no,scrollbars=no,location=no,resizable=no');
 			}
 		</script>
 	</head>
@@ -75,7 +75,7 @@
 						</div>
 						<div class="span-40">
 							<div class="span-5 locHMiddle">
-								<a class="text1" href="#">{$enterprise['interviewNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}">{$enterprise['interviewNum']}</a>
 							</div>
 							<div class="span-5 locHMiddle">
 								<a class="text1" href="#">{$enterprise['offerNum']}</a>

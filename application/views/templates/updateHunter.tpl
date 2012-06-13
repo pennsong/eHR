@@ -87,7 +87,10 @@
 				  <img class="logo" src="{base_url()}resource/img/logo.png"/>
 			</div>
 			<div class="prepend-1 span-62">
-				<form id="locHunterRegisterForm" action="{site_url('hunterInfo/noLogin_validate/create')}" method="post">
+				<form id="locHunterRegisterForm" action="{site_url('hunterInfo/noLogin_validate/update')}" method="post">
+					<div class="span-62">
+						<input type="hidden" id="hunter" name="hunter" value="{$smarty.post.hunter}"/>
+					</div>
 					<div class="span-62">
 						<!--{if isset($errorMsg)}-->
 						<!--{$errorMsg}-->
@@ -99,65 +102,65 @@
 						用户名
 					</div>
 					<div class="span-55">
-						<input id="name" name="name" type="text" class="validate[required, custom[onlyLetterNumber, minSize[6], maxSize[14]]" value="{$hunterInfo['name']|default:''}"/>
+						<input id="name" name="name" type="text" class="validate[required, custom[onlyLetterNumber, minSize[6], maxSize[14]]" value="{$smarty.post.name|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						密码
 					</div>
 					<div class="span-55">
-						<input id="password" name="password" type="text" class="validate[required, custom[onlyLetterNumber, minSize[6], maxSize[14]]" value="{$hunterInfo['password']|default:''}"/>
+						<input id="password" name="password" type="text" class="validate[required, custom[onlyLetterNumber, minSize[6], maxSize[14]]" value="{$smarty.post.password|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						确认密码
 					</div>
 					<div class="span-55">
-						<input id="passwordConfirm" name="passwordConfirm" type="text" class="validate[required, equals[password]" value="{$hunterInfo['passwordConfirm']|default:''}"/>
+						<input id="passwordConfirm" name="passwordConfirm" type="text" class="validate[required, equals[password]" value="{$smarty.post.passwordConfirm|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						座机
 					</div>
 					<div class="span-55">
-						<input id="fixphone1" name="fixphone1" type="text" class="validate[required, custom[onlyNumberSp]" value="{$hunterInfo['fixphone1']|default:''}"/>
+						<input id="fixphone1" name="fixphone1" type="text" class="validate[required, custom[onlyNumberSp]" value="{$smarty.post.fixphone1|default:''}"/>
 						-
-						<input id="fixphone2" name="fixphone2" type="text" class="validate[required, custom[onlyNumberSp]" value="{$hunterInfo['fixphone2']|default:''}"/>
+						<input id="fixphone2" name="fixphone2" type="text" class="validate[required, custom[onlyNumberSp]" value="{$smarty.post.fixphone2|default:''}"/>
 						-
-						<input id="fixphone3" name="fixphone3" type="text" class="validate[required, custom[onlyNumberSp]" value="{$hunterInfo['fixphone3']|default:''}"/>
+						<input id="fixphone3" name="fixphone3" type="text" class="validate[required, custom[onlyNumberSp]" value="{$smarty.post.fixphone3|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						手机号
 					</div>
 					<div class="span-55">
-						<input id="mobile" name="mobile" type="text" class="validate[required, custom[onlyNumberSp], minSize[11], maxSize[11], funcCall[checkMobile]]" value="{$hunterInfo['mobile']|default:''}"/>
+						<input id="mobile" name="mobile" type="text" class="validate[required, custom[onlyNumberSp], minSize[11], maxSize[11], funcCall[checkMobile]]" value="{$smarty.post.mobile|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						姓名
 					</div>
 					<div class="span-55">
-						<input id="personName" name="personName" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$hunterInfo['personName']|default:''}"/>
+						<input id="personName" name="personName" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$smarty.post.personName|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						身份证号码
 					</div>
 					<div class="span-55">
-						<input id="idNo" name="idNo" type="text" class="validate[required, funcCall[checkIdNo]]" value="{$hunterInfo['idNo']|default:''}"/>
+						<input id="idNo" name="idNo" type="text" class="validate[required, funcCall[checkIdNo]]" value="{$smarty.post.idNo|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						常用地址
 					</div>
 					<div class="span-55">
-						<input id="address" name="address" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$hunterInfo['address']|default:''}"/>
+						<input id="address" name="address" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$smarty.post.address|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						银行卡帐号
 					</div>
 					<div class="span-55">
-						<input id="bankNo" name="bankNo" type="text" class="validate[required, custom[onlyNumberSp]" value="{$hunterInfo['bankNo']|default:''}"/>
+						<input id="bankNo" name="bankNo" type="text" class="validate[required, custom[onlyNumberSp]" value="{$smarty.post.bankNo|default:''}"/>
 					</div>
 					<div class="span-7 label1">
 						银行卡开户行
 					</div>
 					<div class="span-55">
-						<input id="bankName" name="bankName" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$hunterInfo['bankName']|default:''}"/>
+						<input id="bankName" name="bankName" type="text" class="validate[required, custom[onlyNumberLetterChinese]" value="{$smarty.post.bankName|default:''}"/>
 					</div>
 					<div class="span-6">
 						<input type="submit" value="保存"/>

@@ -8,87 +8,177 @@ class hunterInfo extends CW_Controller
 		parent::__construct();
 	}
 
+	public function index($hunter)
+	{
+		//取得猎头信息
+		$query = $this->db->query('SELECT * FROM hunter WHERE active =1 AND id = ?', $hunter);
+		if ($query->num_rows() > 0)
+		{
+			$hunterInfo = $query->first_row('array');
+			$hunterInfo['hunter'] = $hunter;
+			$_POST = $hunterInfo;
+			$this->smarty->display('updateHunter.tpl');
+		}
+	}
+
 	public function noLogin_register()
 	{
 		$this->smarty->display('registerHunter.tpl');
 	}
 
-	public function noLogin_validateRegister()
+	public function noLogin_validate($type)
 	{
 		$var = '';
-		$hunterInfo['name'] = $this->input->post('name');
-		$hunterInfo['password'] = $this->input->post('password');
-		$hunterInfo['passwordConfirm'] = $this->input->post('passwordConfirm');
-		$hunterInfo['fixphone1'] = $this->input->post('fixphone1');
-		$hunterInfo['fixphone2'] = $this->input->post('fixphone2');
-		$hunterInfo['fixphone3'] = $this->input->post('fixphone3');
-		$hunterInfo['mobile'] = $this->input->post('mobile');
-		$hunterInfo['personName'] = $this->input->post('personName');
-		$hunterInfo['idNo'] = $this->input->post('idNo');
-		$hunterInfo['address'] = $this->input->post('address');
-		$hunterInfo['bankNo'] = $this->input->post('bankNo');
-		$hunterInfo['bankName'] = $this->input->post('bankName');
-		if ($this->_authenticate($var))
+		//空字符串,'null'(不区分大小写)或不存在(false)的变量转换为NULL
+		foreach ($_POST as &$val)
 		{
-			//数据验证成功
-			//插入新猎头数据
-			$query = $this->db->query('SELECT createHunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
-				strtolower($hunterInfo['name']),
-				strtolower($hunterInfo['password']),
-				$hunterInfo['fixphone1'],
-				$hunterInfo['fixphone2'],
-				$hunterInfo['fixphone3'],
-				$hunterInfo['mobile'],
-				$hunterInfo['personName'],
-				$hunterInfo['idNo'],
-				$hunterInfo['address'],
-				$hunterInfo['bankNo'],
-				$hunterInfo['bankName']
-			));
-			if ($query->first_row()->result == 1)
+			$val = emptyToNull($val);
+		}
+		if ($this->authenticate($var, $type))
+		{
+			//成功
+			$this->smarty->assign('okMsg', '成功!');
+			if ($type == 'update')
 			{
-				redirect(base_url()."index.php/login/login2/{$hunterInfo['name']}/{$hunterInfo['password']}");
+				$this->smarty->display('updateHunter.tpl');
 			}
-			else
+			else if ($type == 'create')
 			{
-				$var = '数据保存失败!';
-				$this->smarty->assign('errorMsg', $var);
-				$this->smarty->display('registerHunter.tpl');
+				redirect(base_url()."index.php/login/login2/{$this->input->post('name')}/{$this->input->post('password')}");
 			}
 		}
 		else
 		{
-			//数据验证失败
-			$this->smarty->assign('hunterInfo', $hunterInfo);
+			//失败
 			$this->smarty->assign('errorMsg', $var);
-			$this->smarty->display('registerHunter.tpl');
+			if ($type == 'update')
+			{
+				$this->smarty->display('updateHunter.tpl');
+			}
+			else if ($type == 'create')
+			{
+				$this->smarty->display('registerHunter.tpl');
+			}
 		}
 	}
 
-	private function _authenticate(&$var)
+	public function authenticate(&$var, $type)
 	{
 		$this->lang->load('form_validation', 'chinese');
-		//检查数据类型
-		if (!($this->_checkDataFormat($result)))
+		//检查数据格式
+		if (!($this->_checkDataFormat($result, $type)))
 		{
 			$var = $result;
 			return FALSE;
 		}
+		//保存数据
 		else
 		{
-			return TRUE;
+			if ($type == 'update')
+			{
+				if ($this->saveUpdate($var))
+				{
+					return TRUE;
+				}
+				else
+				{
+					return FALSE;
+				}
+			}
+			else if ($type == 'create')
+			{
+				if ($this->saveCreate($var))
+				{
+					return TRUE;
+				}
+				else
+				{
+					return FALSE;
+				}
+			}
 		}
 	}
 
-	private function _checkDataFormat(&$result)
+	public function saveCreate(&$var)
+	{
+		$this->db->trans_start();
+		//更新表hunter
+		$query = $this->db->query('SELECT createHunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			strtolower($this->input->post('name')),
+			strtolower($this->input->post('password')),
+			$this->input->post('fixphone1'),
+			$this->input->post('fixphone2'),
+			$this->input->post('fixphone3'),
+			$this->input->post('mobile'),
+			$this->input->post('personName'),
+			$this->input->post('idNo'),
+			$this->input->post('address'),
+			$this->input->post('bankNo'),
+			$this->input->post('bankName')
+		));
+		if ($query->first_row()->result == 1)
+		{
+			$this->db->trans_commit();
+			return TRUE;
+		}
+		else
+		{
+			$var = '数据保存失败!';
+			$this->db->trans_rollback();
+			return FALSE;
+		}
+	}
+
+	public function saveUpdate(&$var)
+	{
+		$this->db->trans_start();
+		//更新表hunter
+		$query = $this->db->query('SELECT updateHunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			strtolower($this->input->post('hunter')),
+			strtolower($this->input->post('password')),
+			$this->input->post('fixphone1'),
+			$this->input->post('fixphone2'),
+			$this->input->post('fixphone3'),
+			$this->input->post('mobile'),
+			$this->input->post('personName'),
+			$this->input->post('idNo'),
+			$this->input->post('address'),
+			$this->input->post('bankNo'),
+			$this->input->post('bankName')
+		));
+		if ($query->first_row()->result == 1)
+		{
+			$this->db->trans_commit();
+			return TRUE;
+		}
+		else
+		{
+			$var = '数据保存失败!';
+			$this->db->trans_rollback();
+			return FALSE;
+		}
+	}
+
+	private function _checkDataFormat(&$result, $type)
 	{
 		$this->load->library('form_validation');
-		$config = array(
-			array(
-				'field' => 'name',
-				'label' => '用户名',
-				'rules' => 'required|alpha_numeric|min_length[6]|max_length[14]|callback_checkNameExisting'
-			),
+		if ($type == 'create')
+		{
+			$config = array( array(
+					'field' => 'name',
+					'label' => '用户名',
+					'rules' => 'required|alpha_numeric|min_length[6]|max_length[14]|callback_checkNameExisting'
+				));
+		}
+		else if ($type == 'update')
+		{
+			$config = array();
+		}
+		else
+		{
+			return FALSE;
+		}
+		$config = array_merge($config, array(
 			array(
 				'field' => 'password',
 				'label' => '密码',
@@ -144,7 +234,7 @@ class hunterInfo extends CW_Controller
 				'label' => '银行卡开户行',
 				'rules' => 'required|alpha_numeric_chinese'
 			)
-		);
+		));
 		$this->form_validation->set_rules($config);
 		$this->form_validation->set_error_delimiters('<span class="error1">*', '</span><br>');
 		if ($this->form_validation->run() == FALSE)
