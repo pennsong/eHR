@@ -78,22 +78,22 @@
 								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}">{$enterprise['interviewNum']}</a>
 							</div>
 							<div class="span-5 locHMiddle">
-								<a class="text1" href="#">{$enterprise['offerNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}">{$enterprise['offerNum']}</a>
 							</div>
 							<div class="span-5 locHMiddle">
-								<a class="text1" href="#">{$enterprise['onboardNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}/other">{$enterprise['onboardNum']}</a>
 							</div>
 							<div class="span-5 locHMiddle">
-								<a class="text1" href="#">{$enterprise['todoNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}/other">{$enterprise['todoNum']}</a>
 							</div>
 							<div class="span-6 locHMiddle">
-								<a class="text1" href="#">{$enterprise['rejectedNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}/other">{$enterprise['rejectedNum']}</a>
 							</div>
 							<div class="span-6 locHMiddle">
-								<a class="text1" href="#">{$enterprise['rejectNum']}</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}/other">{$enterprise['rejectNum']}</a>
 							</div>
 							<div class="span-8">
-								<a class="link1" href="#">管理人才</a>
+								<a class="text1" href="{site_url('hunterManageList/index')}/{$enterprise['id']}">管理人才</a>
 							</div>
 						</div>
 					</div>
@@ -101,7 +101,7 @@
 				</div>
 				<div class="prepend-top  prepend-2 span-60">
 					<div class="prepend-52 span-8">
-						<a class="link1" href="#">进入人才库</a>
+						<a class="text1" href="{site_url('hunterSearchF_job/index')}">进入人才库</a>
 					</div>
 				</div>
 			</div>

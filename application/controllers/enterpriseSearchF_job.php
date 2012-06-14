@@ -250,7 +250,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		$talentInfo = $query->first_row('array');
 		$query->free_all();
 		//取得人才适合城市信息
-		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
+		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent));
 		$talentInfo['cityList'] = '';
 		foreach ($query->result_array() as $city)
 		{
@@ -258,7 +258,7 @@ class EnterpriseSearchF_job extends CW_Controller
 		}
 		$query->free_all();
 		//取得人才适合商区信息
-		$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent['id']));
+		$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent));
 		$talentInfo['businessAreaList'] = '';
 		foreach ($query->result_array() as $city)
 		{

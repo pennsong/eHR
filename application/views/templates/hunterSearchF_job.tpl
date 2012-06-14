@@ -1,6 +1,6 @@
-<!--{extends file='enterprisePage.tpl'}-->
+<!--{extends file='hunterPage.tpl'}-->
 <!--{block name=title}-->
-<title>公司职位挑选人才</title>
+<title>猎头人才库</title>
 <!--{/block}-->
 <!--{block name=style}-->
 <style type="text/css" media="screen">
@@ -20,7 +20,7 @@
 		z-index: 1000;
 		padding-left: 10px;
 		padding-right: 10px;
-		overflow: hidden;
+		overflow: scroll;
 		display: none;
 	}
 	.locExtend {
@@ -28,6 +28,9 @@
 	}
 	#locTalentContainer {
 		height: 850px;
+	}
+	.hiddenInput {
+		display: none;
 	}
 </style>
 <!--{/block}-->
@@ -207,7 +210,7 @@
 				$(".locExtend").attr('openStatus', 'close');
 				$(".locDraw").html('');
 				$(".locDraw").hide();
-				$(".locDraw").load("{site_url('enterpriseSearchF_job/getTalentDetailContent')}/" + object.attr('talentId') + "/{$jobId}", function(responseText, textStatus, XMLHttpRequest) {
+				$(".locDraw").load("{site_url('hunterSearchF_job/getTalentDetailContent')}/" + object.attr('talentId'), function(responseText, textStatus, XMLHttpRequest) {
 					if(textStatus == 'success') {
 						$(".locDraw").show();
 						object.html('<<');
@@ -220,9 +223,8 @@
 </script>
 <!--{/block}-->
 <!--{block name=subBody}-->
-<form id="locForm" action="{site_url('enterpriseSearchF_job/search')}" method="post">
+<form id="locForm" action="{site_url('hunterSearchF_job/search')}" method="post">
 	<div class="prepend-1 span-10">
-		<input id="jobId" name="jobId" type="hidden" value="{$jobId}"/>
 		<div class="relative">
 			<input id="keyWord" name="keyWord" class="locDefaultStrContainer input1" type="text" value="{$smarty.post.keyWord|default:''}" />
 			<div class="locDefaultStr defaultStr1 locUserNameDefaultStr">
@@ -246,7 +248,7 @@
 	</div>
 </form>
 <div class="span-10">
-	<a href="{site_url('enterpriseMain')}">返回首页</a>
+	<a href="{site_url('hunterMain')}">返回首页</a>
 </div>
 <div class="clear prepend-1 span-62 prepend-top">
 	<div class="span-62">

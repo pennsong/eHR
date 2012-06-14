@@ -8,18 +8,15 @@ class HunterSearchF_job extends CW_Controller
 		parent::__construct();
 	}
 
-	public function initPage($jobId)
+	public function initPage()
 	{
-		$this->smarty->assign('jobId', $jobId);
 		$this->smarty->assign('businessAreaListURL', site_url('enterpriseSearchF_job/getBusinessArea'));
-		//取得公司名称
-		$query = $this->db->query('SELECT enterprise FROM enterpriseUser WHERE active = 1 AND id = ?', array($this->session->userdata('userId')));
-		$enterpriseId = $query->first_row()->enterprise;
-		$query = $this->db->query('SELECT name FROM enterprise WHERE active = 1 AND id = ?', array($enterpriseId));
-		$this->smarty->assign('userName', $query->first_row()->name);
 		//取得城市列表
 		$query = $this->db->query('SELECT id, name FROM city WHERE active = 1');
 		$this->smarty->assign('cityList', $query->result_array());
+		//取得商区列表
+		$query = $this->db->query('SELECT id, name FROM businessArea WHERE active = 1');
+		$this->smarty->assign('businessAreaList', $query->result_array());
 		//取得性别列表
 		$query = $this->db->query('SELECT id, name FROM sex WHERE active = 1');
 		$this->smarty->assign('sexList', $query->result_array());
@@ -61,34 +58,33 @@ class HunterSearchF_job extends CW_Controller
 		//取得语言表达相关列表
 		$query = $this->db->query('SELECT id, name FROM commonLevel WHERE active = 1');
 		$this->smarty->assign('expressionList', $query->result_array());
+		//取得适合行业列表
+		$query = $this->db->query('SELECT id, name FROM industry WHERE active = 1');
+		$this->smarty->assign('fitIndustryList', $query->result_array());
+		//取得不适合行业列表
+		$query = $this->db->query('SELECT id, name FROM industry WHERE active = 1');
+		$this->smarty->assign('unfitIndustryList', $query->result_array());
 	}
 
-	public function index($jobId, $offset = 0, $limit = 10)
+	public function index($offset = 0, $limit = 10)
 	{
-		if (!ctype_digit($jobId))
-		{
-			show_error('不合法参数', $status_code = 404);
-		}
-		$this->initPage($jobId);
+		$this->initPage();
+		$hunter = $this->session->userdata('userId');
 		//处理分页
 		$this->load->library('pagination');
-		$config['base_url'] = site_url('enterpriseSearchF_job/index/'.$jobId);
-		$config['uri_segment'] = 4;
+		$config['base_url'] = site_url('hunterSearchF_job/index/');
+		$config['uri_segment'] = 3;
 		//取得符合条件人才信息条数
-		$query = $this->db->query('CALL getFitTalentF_job(?, ?, NULL, NULL)', array(
-			$jobId,
-			TRUE
-		));
+		$query = $this->db->query('SELECT count(*) num FROM talent WHERE hunter = ?', array($hunter));
 		$config['total_rows'] = $query->first_row()->num;
 		$query->free_all();
 		$config['per_page'] = '10';
 		$this->pagination->initialize($config);
 		//取得符合条件人才信息
-		$query = $this->db->query('CALL getFitTalentF_job(?, ?, ?, ?)', array(
-			$jobId,
-			NULL,
-			$offset,
-			$limit
+		$query = $this->db->query('SELECT * FROM talent WHERE hunter = ? LIMIT ?, ?', array(
+			(int)$hunter,
+			(int)$offset,
+			(int)$limit
 		));
 		$talentList = $query->result_array();
 		$query->free_all();
@@ -117,20 +113,14 @@ class HunterSearchF_job extends CW_Controller
 			$query->free_all();
 		}
 		$this->smarty->assign('talentList', $talentList);
-		$this->smarty->assign('jobId', $jobId);
-		$this->smarty->display('enterpriseSearchF_job.tpl');
+		$this->smarty->display('hunterSearchF_job.tpl');
 	}
 
 	public function search($offset = 0, $limit = 10)
 	{
+		$this->initPage();
 		$this->load->helper('string_helper');
-		$jobId = emptyToNull($this->input->post('jobId'));
-		if (!ctype_digit($jobId))
-		{
-			show_error('不合法参数', $status_code = 404);
-		}
-		$this->initPage($jobId);
-		$hunter = emptyToNull($this->input->post('hunter'));
+		$hunter = $this->session->userdata('userId');
 		$keyWord = emptyToNull($this->input->post('keyWord'));
 		$city = emptyToNull($this->input->post('city'));
 		$businessArea = emptyToNull($this->input->post('businessArea'));
@@ -161,8 +151,7 @@ class HunterSearchF_job extends CW_Controller
 		$config['base_url'] = '';
 		$config['uri_segment'] = 3;
 		//取得符合条件人才信息条数
-		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
-			$jobId,
+		$query = $this->db->query('CALL getTalentSearchF_hunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
 			$keyWord,
 			$hunter,
 			$sex,
@@ -182,8 +171,7 @@ class HunterSearchF_job extends CW_Controller
 		$config['per_page'] = '10';
 		$this->pagination->initialize($config);
 		//取得符合条件人才信息
-		$query = $this->db->query('CALL getFitTalentSearchF_job(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
-			$jobId,
+		$query = $this->db->query('CALL getTalentSearchF_hunter(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array(
 			$keyWord,
 			$hunter,
 			$sex,
@@ -225,8 +213,7 @@ class HunterSearchF_job extends CW_Controller
 			$query->free_all();
 		}
 		$this->smarty->assign('talentList', $talentList);
-		$this->smarty->assign('jobId', $jobId);
-		$this->smarty->display('enterpriseSearchF_job.tpl');
+		$this->smarty->display('hunterSearchF_job.tpl');
 	}
 
 	public function getBusinessArea($cityId = NULL)
@@ -243,241 +230,301 @@ class HunterSearchF_job extends CW_Controller
 		$this->smarty->display('businessAreaList.tpl');
 	}
 
-	public function getTalentDetailContent($talent, $jobId)
+	public function getTalentDetailContent($talent)
 	{
+		$this->initPage();
 		//取得人才信息
 		$query = $this->db->query('CALL getInfoF_talent(?)', array($talent));
 		$talentInfo = $query->first_row('array');
+		$talentInfo['talent'] = $talentInfo['id'];
 		$query->free_all();
 		//取得人才适合城市信息
-		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent['id']));
-		$talentInfo['cityList'] = '';
-		foreach ($query->result_array() as $city)
-		{
-			$talentInfo['cityList'] .= $city['cityName'].",";
-		}
+		$query = $this->db->query('CALL getFitCityF_talent(?)', array($talent));
+		$talentInfo['cityList'] = $query->result_array();
 		$query->free_all();
 		//取得人才适合商区信息
-		$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent['id']));
-		$talentInfo['businessAreaList'] = '';
-		foreach ($query->result_array() as $city)
-		{
-			$talentInfo['businessAreaList'] .= $city['businessAreaName'];
-		}
+		$query = $this->db->query('CALL getFitBusinessAreaF_talent(?)', array($talent));
+		$talentInfo['businessAreaList'] = $query->result_array();
 		$query->free_all();
-		//取得猎头信息
-		$query = $this->db->query('SELECT name FROM hunter WHERE active = 1 AND id = ?', array($talentInfo['hunter']));
-		$hunterName = $query->first_row()->name;
-		$this->smarty->assign('hunterName', $hunterName);
-		$this->smarty->assign('talentInfo', $talentInfo);
-		$this->smarty->assign('jobId', $jobId);
-		$this->smarty->display('talentDetailForEnterprise.tpl');
-	}
-
-	public function getHunterSuccessNum($hunter)
-	{
-		//获得对应猎头成功推荐人数
-		$query = $this->db->query('CALL getDealSuccessNumF_hunter(?)', array($hunter));
-		$hunterSuccessNum = $query->first_row()->num;
+		//取得人才适合行业
+		$query = $this->db->query('CALL getFitIndustryF_talent(?)', array($talent));
+		$talentInfo['fitIndustryList'] = $query->result_array();
 		$query->free_all();
-		echo '<span class="text1">'.$hunterSuccessNum.'人</span>';
+		//取得人才适合行业
+		$query = $this->db->query('CALL getUnfitIndustryF_talent(?)', array($talent));
+		$talentInfo['unfitIndustryList'] = $query->result_array();
+		$query->free_all();
+		$_POST = $talentInfo;
+		$this->smarty->display('talentDetailForHunter.tpl');
 	}
 
-	public function getHunterPoint($hunter)
+	public function validate()
 	{
-		//获得对应猎头积分
-		$query = $this->db->query('CALL getPointF_hunter(?)', array($hunter));
-		$hunterPoint = $query->first_row()->point;
-		echo '<span class="text1">'.$hunterPoint.'人</span>';
-	}
-
-	public function getHunterRecommendNum($hunter)
-	{
-		//获得猎头总共推荐人数
-		$query = $this->db->query('CALL getDealNumF_hunter(?)', array($hunter));
-		$recommendNum = $query->first_row()->num;
-		echo '<span class="text1">'.$recommendNum.'人</span>';
-	}
-
-	public function getButtonLayout($job, $talent)
-	{
-		//取得交易id
-		$query = $this->db->query('SELECT id FROM deal WHERE active = 1 AND job = ? AND talent = ?', array(
-			$job,
-			$talent
-		));
-		if ($query->num_rows() > 0)
+		$var = '';
+		//空字符串,'null'(不区分大小写)或不存在(false)的变量转换为NULL,并把ajax递交的数组转换回来
+		foreach ($_POST as &$val)
 		{
-			$deal = $query->first_row()->id;
-			$this->smarty->assign('deal', $deal);
-			//获得交易当前状态
-			$query = $this->db->query('CALL getStatusF_deal(?)', array($deal));
-			if ($query->num_rows() > 0)
+			$val = emptyToNull($val);
+			if (strstr($val, '_'))
 			{
-				$status = $query->first_row()->status;
+				$val = str_replace(",", "", $val);
+				$val = explode('_', $val);
+				array_pop($val);
+			}
+		}
+		$this->initPage();
+		if ($this->authenticate($var))
+		{
+			//成功
+			$this->smarty->assign('okMsg', '成功!');
+			$this->smarty->display('talentDetailForHunter.tpl');
+		}
+		else
+		{
+			//失败
+			$this->smarty->assign('errorMsg', $var);
+			$this->smarty->display('talentDetailForHunter.tpl');
+		}
+	}
+
+	public function authenticate(&$var)
+	{
+		$this->lang->load('form_validation', 'chinese');
+		//检查数据格式
+		if (!($this->_checkDataFormat($result)))
+		{
+			$var = $result;
+			return FALSE;
+		}
+		//保存数据
+		else
+		{
+			if ($this->saveUpdate($var))
+			{
+				return TRUE;
 			}
 			else
 			{
-				$status = '0';
+				return FALSE;
 			}
-			$query->free_all();
-		}
-		else
-		{
-			//无交易
-			$status = '0';
-		}
-		//设置面试按钮状态
-		$interviewDisabled = TRUE;
-		if (in_array($status, array(
-			'0',
-			'1',
-			'3'
-		), true))
-		{
-			$interviewDisabled = FALSE;
-		}
-		//设置待定按钮状态
-		$todoDisabled = TRUE;
-		if (in_array($status, array('0'), true))
-		{
-			$todoDisabled = FALSE;
-		}
-		//设置拒绝按钮状态
-		$rejectDisabled = TRUE;
-		if (in_array($status, array(
-			'2',
-			'3'
-		), true))
-		{
-			$rejectDisabled = FALSE;
-		}
-		//设置deal状态名
-		if ($status != 0)
-		{
-			$query = $this->db->query('SELECT name FROM dealStatus WHERE id = ?', array($status));
-			$dealStatusName = $query->first_row()->name;
-		}
-		else
-		{
-			$dealStatusName = '未开始';
-		}
-		$this->smarty->assign('dealStatusName', $dealStatusName);
-		$this->smarty->assign('interviewDisabled', $interviewDisabled);
-		$this->smarty->assign('todoDisabled', $todoDisabled);
-		$this->smarty->assign('rejectDisabled', $rejectDisabled);
-		$this->smarty->display('enterpriseSearchF_job_getButtonLayout.tpl');
-	}
-
-	public function createStatusF_deal($talent, $job, $status, $note = '')
-	{
-		$role = "enterpriseUser";
-		$enterPriseUser = $this->session->userdata('userId');
-		//新建交易状态
-		$this->db->trans_start();
-		$query = $this->db->query('SELECT createStatusF_talent_job(?, ?, ?, ?, ?, ?) vResult', array(
-			$talent,
-			$job,
-			$status,
-			emptyToNull(urldecode($note)),
-			'enterpriseUser',
-			$enterPriseUser
-		));
-		$result = $query->first_row()->vResult;
-		$query->free_all();
-		if ($result == 1)
-		{
-			//新建成功
-			$this->db->trans_commit();
-			echo 'ok';
-		}
-		else
-		{
-			//新建失败
-			$this->db->trans_rollback();
-			echo 'failed';
 		}
 	}
 
-	public function createStatusF_deal2($deal, $status, $note = '')
-	{
-		$role = "enterpriseUser";
-		$enterPriseUser = $this->session->userdata('userId');
-		//新建交易状态
-		$this->db->trans_start();
-		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
-			$deal,
-			$status,
-			emptyToNull(urldecode($note)),
-			'enterpriseUser',
-			$enterPriseUser
-		));
-		$result = $query->first_row()->vResult;
-		$query->free_all();
-		if ($result == 1)
-		{
-			//新建成功
-			$this->db->trans_commit();
-			echo 'ok';
-		}
-		else
-		{
-			//新建失败
-			$this->db->trans_rollback();
-			echo 'failed';
-		}
-	}
-
-	public function getDealHistory($talent, $hunter, $enterprise)
-	{
-		$query = $this->db->query('CALL getDealHistoryF_hunter_enterprise(?, ?, ?, ?, ?)', array(
-			$talent,
-			$hunter,
-			$enterprise,
-			NULL,
-			NULL
-		));
-		if ($query->num_rows() > 0)
-		{
-			$this->smarty->assign('dealHistory', $query->result_array());
-		}
-		$query->free_all();
-		$this->smarty->display('hunterDealHistory.tpl');
-	}
-
-	public function getDealTodo($talent, $enterprise)
-	{
-		$query = $this->db->query('CALL getHunterToDoF_talent_enterprise(?, ?, ?, ?)', array(
-			$talent,
-			$enterprise,
-			NULL,
-			NULL
-		));
-		if ($query->num_rows() > 0)
-		{
-			$this->smarty->assign('dealTodo', $query->result_array());
-		}
-		$query->free_all();
-		$this->smarty->display('hunterDealTodo.tpl');
-	}
-
-	public function updateDealInfo($job, $talent, $enterpriseNote)
+	public function saveUpdate(&$var)
 	{
 		$this->db->trans_start();
-		$query = $this->db->query('SELECT updateDealEnterpriseNote(?, ?, ?) vResult', array(
-			$talent,
-			$job,
-			urldecode($enterpriseNote)
+		//更新表talent表
+		$query = $this->db->query('SELECT updateTalent(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) result', array(
+			$this->input->post('talent'),
+			$this->input->post('talentPersonName'),
+			$this->input->post('birthYear'),
+			$this->input->post('photoURL'),
+			$this->input->post('videoURL'),
+			$this->input->post('sex'),
+			$this->input->post('marriage'),
+			$this->input->post('height'),
+			$this->input->post('education'),
+			$this->input->post('appearance'),
+			$this->input->post('expression'),
+			$this->input->post('hunterNote'),
+			$this->input->post('release')
 		));
-		if ($query->first_row()->vResult == 1)
+		if ($query->first_row()->result == 1)
 		{
-			$this->db->trans_commit();
-			echo "修改成功";
+			//处理城市
+			//删除原有记录
+			if ($this->db->query('DELETE FROM talentFitCity WHERE talent = ?', array($this->input->post('talent'))))
+			{
+				//插入新记录
+				if ($this->input->post('cityList') != NULL)
+				{
+					foreach ($this->input->post('cityList') as $city)
+					{
+						if ($this->db->query('INSERT INTO talentFitCity(`talent`, `city`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+							$this->input->post('talent'),
+							$city
+						)))
+						{
+						}
+						else
+						{
+							$var = '数据保存失败(新建talentFitCity出错)!';
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				$var = '数据保存失败!(删除原有talentFitCity记录出错)';
+			}
+			//处理商区
+			if ($var == NULL)
+			{
+				//删除原有记录
+				if ($this->db->query('DELETE FROM talentFitBusinessArea WHERE talent = ?', array($this->input->post('talent'))))
+				{
+					//插入新记录
+					if ($this->input->post('businessAreaList') != NULL)
+					{
+						foreach ($this->input->post('businessAreaList') as $businessArea)
+						{
+							if ($this->db->query('INSERT INTO talentFitBusinessArea(`talent`, `businessArea`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$this->input->post('talent'),
+								$businessArea
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(talentFitBusinessArea)!';
+								break;
+							}
+						}
+					}
+				}
+			}
+			//处理适合行业
+			if ($var == NULL)
+			{
+				//删除原有记录
+				if ($this->db->query('DELETE FROM talentFitIndustry WHERE talent = ?', array($this->input->post('talent'))))
+				{
+					//插入新记录
+					if ($this->input->post('fitIndustryList') != NULL)
+					{
+						foreach ($this->input->post('fitIndustryList') as $fitIndustry)
+						{
+							if ($this->db->query('INSERT INTO talentFitIndustry(`talent`, `industry`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$this->input->post('talent'),
+								$fitIndustry
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(talentFitIndustry)!';
+								break;
+							}
+						}
+					}
+				}
+			}
+			//处理不适合行业
+			if ($var == NULL)
+			{
+				//删除原有记录
+				if ($this->db->query('DELETE FROM talentUnfitIndustry WHERE talent = ?', array($this->input->post('talent'))))
+				{
+					//插入新记录
+					if ($this->input->post('unfitIndustryList') != NULL)
+					{
+						foreach ($this->input->post('unfitIndustryList') as $unfitIndustry)
+						{
+							if ($this->db->query('INSERT INTO talentUnfitIndustry(`talent`, `industry`, `updated`, `created`) VALUES(?, ?, null, null)', array(
+								$this->input->post('talent'),
+								$unfitIndustry
+							)))
+							{
+							}
+							else
+							{
+								$var = '数据保存失败(talentUnfitIndustry)!';
+								break;
+							}
+						}
+					}
+				}
+			}
+			if ($var == NULL)
+			{
+				$this->db->trans_commit();
+				return TRUE;
+			}
+			else
+			{
+				$this->db->trans_rollback();
+				return FALSE;
+			}
 		}
 		else
 		{
+			$var = '数据保存失败(更新talent表)!';
 			$this->db->trans_rollback();
-			echo "修改失败";
+			return FALSE;
+		}
+	}
+
+	private function _checkDataFormat(&$result)
+	{
+		$this->load->library('form_validation');
+		$config = array(
+			array(
+				'field' => 'cityList[]',
+				'label' => '城市',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'businessAreaList[]',
+				'label' => '商区',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'sex',
+				'label' => '性别',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'marriage',
+				'label' => '婚否',
+				'rules' => 'is_natural'
+			),
+			array(
+				'field' => 'height',
+				'label' => '身高',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'education',
+				'label' => '教育',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'appearance',
+				'label' => '外表相关',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'expression',
+				'label' => '语言表达相关',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'fitIndustry[]',
+				'label' => '适合行业',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'unfitIndustry[]',
+				'label' => '不适合行业',
+				'rules' => 'is_natural_no_zero'
+			),
+			array(
+				'field' => 'release',
+				'label' => '发布',
+				'rules' => 'is_natural'
+			)
+		);
+		$this->form_validation->set_rules($config);
+		$this->form_validation->set_error_delimiters('<span class="error1">*', '</span><br>');
+		if ($this->form_validation->run() == FALSE)
+		{
+			$result = validation_errors();
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
 		}
 	}
 
