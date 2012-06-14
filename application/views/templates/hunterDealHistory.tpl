@@ -33,7 +33,7 @@
 		{$history['statusName']}
 	</div>
 	<div class="span-10">
-		{$history['note']}
+		{$history['note']|default:'无'}
 	</div>
 	<div class="span-5">
 		{$history['created']}

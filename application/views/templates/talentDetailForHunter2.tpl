@@ -2,15 +2,38 @@
 <!--{block name=title}-->
 <title>人才详细信息</title>
 <!--{/block}-->
+<!--{block name=style}-->
+<style>
+	.locSelected {
+		background-color: #0000FF;
+		color: #FFFFFF
+	}
+</style>
+<!--{/block}-->
 <!--{block name=subScript}-->
 <!--{$flowplayerHead}-->
 <script>
 	$(document).ready(function() {
-		//获得交易历史
-		$("#historySection").load("{site_url('hunterSearchF_job/getDealHistory')}/{$talentInfo['id']}/{$CI->session->userdata('userId')}/{$enterprise}", function(responseText, textStatus, XMLHttpRequest) {
-			if(textStatus == 'success') {
-			}
+		$("#todoList").click(function() {
+			//获得待办事项
+			$("#todoOrHistorySection").load("{site_url('hunterSearchF_job/getDealTodo')}/{$talentInfo['id']}/{$enterprise}", function(responseText, textStatus, XMLHttpRequest) {
+				if(textStatus == 'success') {
+					$("#todoList").attr("class", "locSelected");
+					$("#historyList").attr("class", "");
+				}
+			});
 		});
+		$("#historyList").click(function() {
+			//获得交易历史
+			$("#todoOrHistorySection").load("{site_url('hunterSearchF_job/getDealHistory')}/{$talentInfo['id']}/{$CI->session->userdata('userId')}/{$enterprise}", function(responseText, textStatus, XMLHttpRequest) {
+				if(textStatus == 'success') {
+					$("#todoList").attr("class", "");
+					$("#historyList").attr("class", "locSelected");
+				}
+			});
+		});
+		//默认打开待办事项
+		$("#todoList").click();
 		//设置视频
 		flowplayer("locPlayer", "{base_url()}resource/flowplayer/flowplayer-3.2.7.swf", {
 			clip : {
@@ -146,6 +169,12 @@
 	</div>
 </div>
 <div class="prepend-2 span-30">
-	<div id="historySection" class="span-30"></div>
+	<div class="span-5">
+		<a id="todoList" href="#">待办事项</a>
+	</div>
+	<div class="span-5">
+		<a id="historyList" href="#">历史记录</a>
+	</div>
+	<div id="todoOrHistorySection" class="span-30"></div>
 </div>
 <!--{/block}-->

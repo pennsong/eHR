@@ -375,9 +375,38 @@ class HunterSearchF_job extends CW_Controller
 		$enterPriseUser = $this->session->userdata('userId');
 		//新建交易状态
 		$this->db->trans_start();
-		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?, ?) vResult', array(
+		$query = $this->db->query('SELECT createStatusF_talent_job(?, ?, ?, ?, ?, ?) vResult', array(
 			$talent,
 			$job,
+			$status,
+			emptyToNull(urldecode($note)),
+			'enterpriseUser',
+			$enterPriseUser
+		));
+		$result = $query->first_row()->vResult;
+		$query->free_all();
+		if ($result == 1)
+		{
+			//新建成功
+			$this->db->trans_commit();
+			echo 'ok';
+		}
+		else
+		{
+			//新建失败
+			$this->db->trans_rollback();
+			echo 'failed';
+		}
+	}
+
+	public function createStatusF_deal2($deal, $status, $note = '')
+	{
+		$role = "enterpriseUser";
+		$enterPriseUser = $this->session->userdata('userId');
+		//新建交易状态
+		$this->db->trans_start();
+		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
+			$deal,
 			$status,
 			emptyToNull(urldecode($note)),
 			'enterpriseUser',
@@ -414,6 +443,22 @@ class HunterSearchF_job extends CW_Controller
 		}
 		$query->free_all();
 		$this->smarty->display('hunterDealHistory.tpl');
+	}
+
+	public function getDealTodo($talent, $enterprise)
+	{
+		$query = $this->db->query('CALL getHunterToDoF_talent_enterprise(?, ?, ?, ?)', array(
+			$talent,
+			$enterprise,
+			NULL,
+			NULL
+		));
+		if ($query->num_rows() > 0)
+		{
+			$this->smarty->assign('dealTodo', $query->result_array());
+		}
+		$query->free_all();
+		$this->smarty->display('hunterDealTodo.tpl');
 	}
 
 	public function updateDealInfo($job, $talent, $enterpriseNote)
