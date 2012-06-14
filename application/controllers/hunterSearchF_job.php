@@ -291,6 +291,34 @@ class HunterSearchF_job extends CW_Controller
 		$this->smarty->display('hunterDealTodo.tpl');
 	}
 
+	public function createStatusF_deal2($deal, $status, $note = '')
+	{
+		$hunter = $this->session->userdata('userId');
+		//新建交易状态
+		$this->db->trans_start();
+		$query = $this->db->query('SELECT createStatusF_deal(?, ?, ?, ?, ?) vResult', array(
+			$deal,
+			$status,
+			emptyToNull(urldecode($note)),
+			'hunter',
+			$hunter
+		));
+		$result = $query->first_row()->vResult;
+		$query->free_all();
+		if ($result == 1)
+		{
+			//新建成功
+			$this->db->trans_commit();
+			echo 'ok';
+		}
+		else
+		{
+			//新建失败
+			$this->db->trans_rollback();
+			echo 'failed';
+		}
+	}
+
 	public function validate()
 	{
 		$var = '';

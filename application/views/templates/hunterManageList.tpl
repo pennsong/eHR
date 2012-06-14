@@ -1,4 +1,4 @@
-<!--{extends file='enterprisePage.tpl'}-->
+<!--{extends file='hunterPage.tpl'}-->
 <!--{block name=title}-->
 <title>猎头招聘进程</title>
 <!--{/block}-->
