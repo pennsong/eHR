@@ -258,6 +258,39 @@ class HunterSearchF_job extends CW_Controller
 		$this->smarty->display('talentDetailForHunter.tpl');
 	}
 
+	public function getDealHistory($talent, $hunter, $enterprise)
+	{
+		$query = $this->db->query('CALL getDealHistoryF_hunter_enterprise(?, ?, ?, ?, ?)', array(
+			$talent,
+			$hunter,
+			$enterprise,
+			NULL,
+			NULL
+		));
+		if ($query->num_rows() > 0)
+		{
+			$this->smarty->assign('dealHistory', $query->result_array());
+		}
+		$query->free_all();
+		$this->smarty->display('hunterDealHistory.tpl');
+	}
+
+	public function getDealTodo($talent, $enterprise)
+	{
+		$query = $this->db->query('CALL getHunterToDoF_talent_enterprise(?, ?, ?, ?)', array(
+			$talent,
+			$enterprise,
+			NULL,
+			NULL
+		));
+		if ($query->num_rows() > 0)
+		{
+			$this->smarty->assign('dealTodo', $query->result_array());
+		}
+		$query->free_all();
+		$this->smarty->display('hunterDealTodo.tpl');
+	}
+
 	public function validate()
 	{
 		$var = '';
