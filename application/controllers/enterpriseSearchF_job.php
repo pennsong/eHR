@@ -352,6 +352,21 @@ class EnterpriseSearchF_job extends CW_Controller
 		{
 			$rejectDisabled = FALSE;
 		}
+		//设置到岗按钮状态
+		$onboardDisabled = TRUE;
+		if (in_array($status, array('7'), true))
+		{
+			$onboardDisabled = FALSE;
+		}
+		//设置offer按钮状态
+		$offerDisabled = TRUE;
+		if (in_array($status, array(
+			'1',
+			'3'
+		), true))
+		{
+			$offerDisabled = FALSE;
+		}
 		//设置deal状态名
 		if ($status != 0)
 		{
@@ -366,6 +381,8 @@ class EnterpriseSearchF_job extends CW_Controller
 		$this->smarty->assign('interviewDisabled', $interviewDisabled);
 		$this->smarty->assign('todoDisabled', $todoDisabled);
 		$this->smarty->assign('rejectDisabled', $rejectDisabled);
+		$this->smarty->assign('onboardDisabled', $onboardDisabled);
+		$this->smarty->assign('offerDisabled', $offerDisabled);
 		$this->smarty->display('enterpriseSearchF_job_getButtonLayout.tpl');
 	}
 
@@ -440,6 +457,29 @@ class EnterpriseSearchF_job extends CW_Controller
 		{
 			$this->db->trans_rollback();
 			echo "修改失败";
+		}
+	}
+
+	public function saveEnterpriseRemark($talent, $job, $accurate = NULL, $communication = NULL, $quality = NULL, $enterpriseRemark = NULL)
+	{
+		$this->db->trans_start();
+		$query = $this->db->query('SELECT updateDealEnterpriseRemark(?, ?, ?, ?, ?, ?) vResult', array(
+			$talent,
+			$job,
+			$accurate,
+			$communication,
+			$quality,
+			urldecode($enterpriseRemark)
+		));
+		if ($query->first_row()->vResult == 1)
+		{
+			$this->db->trans_commit();
+			echo "ok";
+		}
+		else
+		{
+			$this->db->trans_rollback();
+			echo "failed";
 		}
 	}
 

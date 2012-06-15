@@ -236,6 +236,13 @@ class Login extends CW_Controller
 		}
 	}
 
+	public function reset()
+	{
+		$query = $this->db->query('CALL t_reset()', array());
+		$query->free_all();
+		echo "db reset successfully, please login home page!";
+	}
+
 }
 
 /*end*/

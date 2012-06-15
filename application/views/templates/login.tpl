@@ -74,6 +74,7 @@
 				<div class="head1">
 					欢迎来到E-hiring
 				</div>
+				<a href={site_url('login/reset')}>重置测试数据</a>
 			</div>
 			<form id="locLoginForm" action="{site_url('login/validateLogin')}" method="post">
 				<div class="clear prepend-19 append-bottom5">
