@@ -16,7 +16,7 @@
 	{foreach $talentInfoList9 as $talent}
 	<div class="prepend-1 span-5">
 		<div class="locImgDiv span-5">
-			<a href="{site_url('enterpriseManageListDetail/getTalentDetailContent')}/{$talent['id']}/{$job}"><img height="50" width="75" src="{if $talent['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{$talent['photoURL']}{/if}" /></a>
+			<a href="{site_url('enterpriseManageListDetail/getTalentDetailContent')}/{$talent['id']}/{$job}"><img height="50" width="75" src="{if $talent['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{base_url()}upload/{$talent['photoURL']}{/if}" /></a>
 			<div class="locNoteDiv">
 				{$talent['hunterNote']}
 			</div>
@@ -36,7 +36,7 @@
 	{foreach $talentInfoList10 as $talent}
 	<div class="prepend-1 span-5">
 		<div class="locImgDiv span-5">
-			<a href="{site_url('enterpriseManageListDetail/getTalentDetailContent')}/{$talent['id']}/{$job}"><img height="50" width="75" src="{if $talent['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{$talent['photoURL']}{/if}" /></a>
+			<a href="{site_url('enterpriseManageListDetail/getTalentDetailContent')}/{$talent['id']}/{$job}"><img height="50" width="75" src="{if $talent['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{base_url()}upload/{$talent['photoURL']}{/if}" /></a>
 			<div class="locNoteDiv">
 				{$talent['hunterNote']}
 			</div>

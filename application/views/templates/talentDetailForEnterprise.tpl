@@ -61,7 +61,7 @@
 		照片
 	</div>
 	<div class="span-23">
-		<img height="240" width="320" src="{if $talentInfo['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{$talentInfo['photoURL']}{/if}" />
+		<img height="240" width="320" src="{if $talentInfo['photoURL'] == NULL}{base_url()}resource/img/defaultPhoto.png{else}{base_url()}upload/{$talentInfo['photoURL']}{/if}" />
 	</div>
 	<div class="span-5">
 		视频
@@ -71,7 +71,7 @@
 		<img height="240" width="320" src="{base_url()}resource/img/defaultPhoto.png" />
 		<!--{else}-->
 		<a
-		href="{$talentInfo['videoURL']}"
+		href="{base_url()}upload/{$talentInfo['videoURL']}"
 		style="display:block;width:320px;height:240px"
 		id="locPlayer"> </a>
 		<!-- this will install flowplayer inside previous A- tag. -->
@@ -98,7 +98,7 @@
 			性别
 		</div>
 		<div class="span-16">
-			{$talentInfo['sex']}
+			{$talentInfo['sexName']}
 		</div>
 	</div>
 	<div class="prepend-5 span-23">
@@ -106,7 +106,7 @@
 			婚否
 		</div>
 		<div class="span-16">
-			{$talentInfo['marriage']}
+			{$talentInfo['marriageName']}
 		</div>
 	</div>
 	<div class="prepend-5 span-23">
@@ -122,7 +122,7 @@
 			学历
 		</div>
 		<div class="span-16">
-			{$talentInfo['education']}
+			{$talentInfo['educationName']}
 		</div>
 	</div>
 	<div class="prepend-5 span-23">
@@ -130,7 +130,7 @@
 			外表相关
 		</div>
 		<div class="span-16">
-			{$talentInfo['appearance']}
+			{$talentInfo['appearanceName']}
 		</div>
 	</div>
 	<div class="prepend-5 span-23">
@@ -138,7 +138,7 @@
 			语言表达相关
 		</div>
 		<div class="span-16">
-			{$talentInfo['expression']}
+			{$talentInfo['expressionName']}
 		</div>
 	</div>
 	<div class="span-5">

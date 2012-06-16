@@ -7,22 +7,22 @@
 			//取得城市数组
 			var cityList = [];
 			$("#cityOption").find("[checked='checked']").each(function() {
-				cityList.push($(this).val()+"_");
+				cityList.push($(this).val()+"array_");
 			});
 			//取得商区数组
 			var businessAreaList = [];
 			$("#businessAreaOption").find("[checked='checked']").each(function() {
-				businessAreaList.push($(this).val()+"_");
+				businessAreaList.push($(this).val()+"array_");
 			});
 			//取得适合行业数组
 			var fitIndustryList = [];
 			$("#fitIndustryOption").find("[checked='checked']").each(function() {
-				fitIndustryList.push($(this).val()+"_");
+				fitIndustryList.push($(this).val()+"array_");
 			});
 			//取得不适合行业数组
 			var unfitIndustryList = [];
 			$("#unfitIndustryOption").find("[checked='checked']").each(function() {
-				unfitIndustryList.push($(this).val()+"_");
+				unfitIndustryList.push($(this).val()+"array_");
 			});
 			var dataString = 'talent=' + $("#talent").val() + '&talentPersonName=' + $("#talentPersonName").val() + '&birthYear=' + $("#birthYear").val() + '&photoURL=' + $("#photoURL").val() + '&videoURL=' + $("#videoURL").val() + '&cityList=' + cityList + '&businessAreaList=' + businessAreaList + '&sex=' + $("#sexInput").val() + '&marriage=' + $("#marriageInput").val() + '&height=' + $("#heightInput").val() + '&education=' + $("#educationInput").val() + '&appearance=' + $("#appearanceInput").val() + '&expression=' + $("#expressionInput").val() + '&fitIndustryList=' + fitIndustryList + '&unfitIndustryList=' + unfitIndustryList + '&release=' + $("#releaseInput").val() + '&hunterNote=' + $("#hunterNoteInput").val();
 			$.ajax({
@@ -109,7 +109,7 @@
 			照片
 		</div>
 		<div class="span-23">
-			<img height="240" width="320" src="{if $smarty.post.photoURL == NULL}{base_url()}resource/img/defaultPhoto.png{else}{$smarty.post.photoURL}{/if}" />
+			<img height="240" width="320" src="{if $smarty.post.photoURL == NULL}{base_url()}resource/img/defaultPhoto.png{else}{base_url()}upload/{$smarty.post.photoURL}{/if}" />
 		</div>
 		<div class="span-5">
 			视频
@@ -119,7 +119,7 @@
 			<img height="240" width="320" src="{base_url()}resource/img/defaultPhoto.png" />
 			<!--{else}-->
 			<a
-			href="{$smarty.post.videoURL}"
+			href="{base_url()}upload/{$smarty.post.videoURL}"
 			style="display:block;width:320px;height:240px"
 			id="locPlayer"> </a>
 			<!-- this will install flowplayer inside previous A- tag. -->

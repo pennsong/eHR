@@ -326,10 +326,10 @@ class HunterSearchF_job extends CW_Controller
 		foreach ($_POST as &$val)
 		{
 			$val = emptyToNull($val);
-			if (strstr($val, '_'))
+			if (strstr($val, 'array_'))
 			{
 				$val = str_replace(",", "", $val);
-				$val = explode('_', $val);
+				$val = explode('array_', $val);
 				array_pop($val);
 			}
 		}
