@@ -20,7 +20,7 @@
 	<div class="span-12">
 		<a href="#" onclick="openWindow()">欢迎您,猎头:{$CI->session->userdata('userName')}</a>
 		<br />
-		<a href="#">下载视频录制软件</a>
+		<a href="{base_url()}resource/Sysplayer.exe">下载视频录制软件</a>
 	</div>
 	<div class="span-3">
 		<a href="{site_url('login/logout')}">退出</a>
